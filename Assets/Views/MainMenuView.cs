@@ -14,12 +14,12 @@ public class MainMenuView : MonoBehaviour
     public void Start()
     {
         // La vue écoute les différents événements qui ont un impacte sur cette dernière et agit en conséquence
-        EventsManager.AddListner(EventsManager.Events.ServersLoaded, OnServersLoaded);
+        EventsManager.AddListener(EventsManager.Events.ServersLoaded, OnServersLoaded);
     }
 
     public void OnDisable()
     {
-        EventsManager.RemoveListner(EventsManager.Events.ServersLoaded, OnServersLoaded);
+        EventsManager.RemoveListener(EventsManager.Events.ServersLoaded, OnServersLoaded);
     }
 
     // La gestion des événements graphiques se fait dans la vue (ex: Button click)

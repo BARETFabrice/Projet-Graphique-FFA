@@ -4,29 +4,33 @@ using UnityEngine.Events;
 
 public static class EventsManager
 {
-    private static Dictionary<string, UnityEvent> m_MyEvents = new Dictionary<string, UnityEvent>();
+    private static Dictionary<Events, UnityEvent> m_MyEvents = new Dictionary<Events, UnityEvent>();
 
+    public enum Events:uint
+    {
+        ServersLoaded
+    }
 
-    public static void AddListener(string a_EventName, UnityAction a_Action)
+    public static void AddListener(Events a_EventId, UnityAction a_Action)
     {
         UnityEvent thisEvent = null;
 
-        bool t_EventExists = m_MyEvents.TryGetValue(a_EventName, out thisEvent);
+        bool t_EventExists = m_MyEvents.TryGetValue(a_EventId, out thisEvent);
 
         if (!t_EventExists)
         {
             thisEvent = new UnityEvent();
-            m_MyEvents.Add(a_EventName, thisEvent);
+            m_MyEvents.Add(a_EventId, thisEvent);
         }
 
         thisEvent.AddListener(a_Action);
     }
 
-    public static void RemoveListener(string a_EventName, UnityAction a_Action)
+    public static void RemoveListener(Events a_EventId, UnityAction a_Action)
     {
         UnityEvent thisEvent = null;
 
-        bool t_EventExists = m_MyEvents.TryGetValue(a_EventName, out thisEvent);
+        bool t_EventExists = m_MyEvents.TryGetValue(a_EventId, out thisEvent);
 
         if (t_EventExists)
         {
@@ -34,11 +38,11 @@ public static class EventsManager
         }
     }
 
-    public static void TriggerEvent(string a_EventName)
+    public static void TriggerEvent(Events a_EventId)
     {
         UnityEvent thisEvent = null;
 
-        bool t_EventExists = m_MyEvents.TryGetValue(a_EventName, out thisEvent);
+        bool t_EventExists = m_MyEvents.TryGetValue(a_EventId, out thisEvent);
 
         if (t_EventExists)
         {
