@@ -7,7 +7,7 @@ public static class MainMenuController
     public static void LoadPlayScene()
     {
         // Exécution du traitement
-        SceneManager.LoadScene("alex");
+        SceneManager.LoadScene("Game");
     }
 
 	public static void QuitGame()
