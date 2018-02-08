@@ -8,7 +8,9 @@ public static class EventsManager
 
     public enum Events:uint
     {
-        ServersLoaded
+        ServersLoaded,
+        OpenScoreboard,
+        CloseScoreboard
     }
 
     public static void AddListener(Events a_EventId, UnityAction a_Action)
