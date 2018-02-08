@@ -4,7 +4,6 @@ using UnityEngine;
 
 public static class PauseMenuController
 {
-    static PauseMenuController() { EventsManager.AddListener(EventsManager.Events.PPressed, mettreEnPauseLeJeu); }
 
     public static void mettreEnPauseLeJeu()
     {

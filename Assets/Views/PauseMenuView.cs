@@ -14,14 +14,12 @@ public class PauseMenuView : MonoBehaviour
 
     public void OnDisable()
     {
-        Debug.Log("PauseMenuView disable");
         EventsManager.RemoveListener(EventsManager.Events.PPressed, OnTogglePauseMenu);
         EventsManager.RemoveListener(EventsManager.Events.TogglePauseMenu, OnTogglePauseMenu);
     }
 
     public void OnTogglePauseMenu()
     {
-        Debug.Log("toggle pause");
         gameObject.GetComponent<CanvasGroup>().alpha = 1f - gameObject.GetComponent<CanvasGroup>().alpha;
     }
 

@@ -57,7 +57,6 @@ public static class EventsManager
 
         if (t_EventExists)
         {
-            Debug.Log(string.Format("Event {0} is triggered {1} times", a_EventId, thisEvent.GetPersistentEventCount()));
             thisEvent.Invoke();
         }
         else
