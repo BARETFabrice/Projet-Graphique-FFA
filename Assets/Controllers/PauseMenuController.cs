@@ -11,16 +11,15 @@ public class PauseMenuController : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.P))
         {
-
-            if (pauseMenuCanvas.gameObject.activeInHierarchy == true)
-            {
-                EventsManager.TriggerEvent(EventsManager.Events.ClosePauseMenu);
-                pauseMenuOpened = false;
-            }
-            else
+            if(!pauseMenuOpened)
             {
                 EventsManager.TriggerEvent(EventsManager.Events.OpenPauseMenu);
                 pauseMenuOpened = true;
+            }
+            else
+            {
+                EventsManager.TriggerEvent(EventsManager.Events.ClosePauseMenu);
+                pauseMenuOpened = false;
             }
         }
     }

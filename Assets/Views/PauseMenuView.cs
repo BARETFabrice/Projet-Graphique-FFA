@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PauseMenuView : MonoBehaviour
 {
-    public Transform pauseMenuCanvas;
-
     public void Start()
     {
+        gameObject.GetComponent<CanvasGroup>().alpha = 0f;
+
         EventsManager.AddListener(EventsManager.Events.OpenPauseMenu, OnOpenPauseMenu);
         EventsManager.AddListener(EventsManager.Events.ClosePauseMenu, OnClosePauseMenu);
     }
@@ -21,12 +21,12 @@ public class PauseMenuView : MonoBehaviour
     public void OnOpenPauseMenu()
     {
         Debug.Log("Pause Menu Open");
-        pauseMenuCanvas.gameObject.SetActive(true);
+        gameObject.GetComponent<CanvasGroup>().alpha = 1f;
     }
 
     public void OnClosePauseMenu()
     {
         Debug.Log("Pause Menu Open");
-        pauseMenuCanvas.gameObject.SetActive(false);
+        gameObject.GetComponent<CanvasGroup>().alpha = 0f;
     }
 }
