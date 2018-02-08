@@ -29,4 +29,15 @@ public class PauseMenuView : MonoBehaviour
         Debug.Log("Pause Menu Open");
         gameObject.GetComponent<CanvasGroup>().alpha = 0f;
     }
+
+    public void OnButtonQuitClicked()
+    {
+        //Ferme l'application et Unity Editor
+
+        #if UNITY_EDITOR
+		UnityEditor.EditorApplication.isPlaying = false;
+        #else
+        Application.Quit();
+        #endif
+    }
 }

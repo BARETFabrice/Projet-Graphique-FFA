@@ -9,18 +9,21 @@ public class PauseMenuController : MonoBehaviour
 
 	void Update ()
     {
-        if(Input.GetKey(KeyCode.P))
+        if(Input.GetKeyDown(KeyCode.P))
         {
-            if(!pauseMenuOpened)
-            {
-                EventsManager.TriggerEvent(EventsManager.Events.OpenPauseMenu);
-                pauseMenuOpened = true;
-            }
-            else
-            {
-                EventsManager.TriggerEvent(EventsManager.Events.ClosePauseMenu);
-                pauseMenuOpened = false;
-            }
+            mettreEnPauseLeJeu();
         }
+    }
+
+    public void mettreEnPauseLeJeu()
+    {
+        EventsManager.TriggerEvent(EventsManager.Events.OpenPauseMenu);
+        pauseMenuOpened = true;
+    }
+
+    public void reprendreLeJeu()
+    {
+        EventsManager.TriggerEvent(EventsManager.Events.ClosePauseMenu);
+        pauseMenuOpened = false;
     }
 }
