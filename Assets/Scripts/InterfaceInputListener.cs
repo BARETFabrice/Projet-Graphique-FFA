@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InterfaceInputListener : MonoBehaviour {
+public class InterfaceInputListener : MonoBehaviour
+{
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         if (Input.GetKeyDown(KeyCode.Tab))
             EventsManager.TriggerEvent(EventsManager.Events.TabPressed);
         else if (Input.GetKeyUp(KeyCode.Tab))

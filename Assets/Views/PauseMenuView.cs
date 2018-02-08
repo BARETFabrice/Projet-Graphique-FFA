@@ -4,41 +4,34 @@ using UnityEngine;
 
 public class PauseMenuView : MonoBehaviour
 {
-
-    public void Start()
+    public void OnEnable()
     {
         gameObject.GetComponent<CanvasGroup>().alpha = 0f;
 
-        EventsManager.AddListener(EventsManager.Events.OpenPauseMenu, OnOpenPauseMenu);
-        EventsManager.AddListener(EventsManager.Events.ClosePauseMenu, OnClosePauseMenu);
+        EventsManager.AddListener(EventsManager.Events.PPressed, OnTogglePauseMenu);
+        EventsManager.AddListener(EventsManager.Events.TogglePauseMenu, OnTogglePauseMenu);
     }
 
     public void OnDisable()
     {
-        EventsManager.RemoveListener(EventsManager.Events.OpenPauseMenu, OnClosePauseMenu);
-        EventsManager.RemoveListener(EventsManager.Events.ClosePauseMenu, OnClosePauseMenu);
+        Debug.Log("PauseMenuView disable");
+        EventsManager.RemoveListener(EventsManager.Events.PPressed, OnTogglePauseMenu);
+        EventsManager.RemoveListener(EventsManager.Events.TogglePauseMenu, OnTogglePauseMenu);
     }
 
-    public void OnOpenPauseMenu()
+    public void OnTogglePauseMenu()
     {
-        Debug.Log("Pause Menu Open");
-        gameObject.GetComponent<CanvasGroup>().alpha = 1f;
-    }
-
-    public void OnClosePauseMenu()
-    {
-        Debug.Log("Pause Menu Open");
-        gameObject.GetComponent<CanvasGroup>().alpha = 0f;
+        Debug.Log("toggle pause");
+        gameObject.GetComponent<CanvasGroup>().alpha = 1f - gameObject.GetComponent<CanvasGroup>().alpha;
     }
 
     public void OnButtonQuitClicked()
     {
-        //Ferme l'application et Unity Editor
+        PauseMenuController.OnButtonQuitClicked();
+    }
 
-        #if UNITY_EDITOR
-		UnityEditor.EditorApplication.isPlaying = false;
-        #else
-        Application.Quit();
-        #endif
+    public void OnButtonExitClicked()
+    {
+        PauseMenuController.OnButtonExitClicked();
     }
 }
