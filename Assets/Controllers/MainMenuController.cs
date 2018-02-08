@@ -12,10 +12,10 @@ public static class MainMenuController
     public static void LoadSinglePlayerScene()
     {
         // Exécution du traitement
-        SceneManager.LoadScene("skdjfhsdkf");
+        SceneManager.LoadScene("alex");
     }
 
-    public static void LoadServers()
+   public static void LoadServers()
     {
         // TODO Aller chercher la liste des serveurs et les stocker dans une variable (serversList)
 
