@@ -10,7 +10,9 @@ public static class EventsManager
     {
         ServersLoaded,
         OpenScoreboard,
-        CloseScoreboard
+        CloseScoreboard,
+        OpenPauseMenu,
+        ClosePauseMenu
     }
 
     public static void AddListener(Events a_EventId, UnityAction a_Action)
