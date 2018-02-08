@@ -8,7 +8,6 @@ public static class EventsManager
 
     public enum Events:uint
     {
-        ServersLoaded,
         OpenScoreboard,
         CloseScoreboard,
         OpenPauseMenu,
