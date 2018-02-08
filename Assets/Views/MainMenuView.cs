@@ -4,19 +4,13 @@ using UnityEngine.UI;
 public class MainMenuView : MonoBehaviour
 {
 	
-    public void OnButtonSinglePlayerClicked()
+    public void OnButtonPlayClicked()
     {
-        MainMenuController.LoadSinglePlayerScene();
+        MainMenuController.LoadPlayScene();
     }
 
 	public void OnButtonQuitClicked()
 	{
-		//Ferme l'application et Unity Editor
-
-		#if UNITY_EDITOR
-		UnityEditor.EditorApplication.isPlaying = false;
-		#else
-		Application.Quit();
-		#endif
+		MainMenuController.QuitGame();
 	}
 }
