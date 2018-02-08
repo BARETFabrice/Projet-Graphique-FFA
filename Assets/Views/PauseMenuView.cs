@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PauseMenuView : MonoBehaviour
 {
+
     public void Start()
     {
         gameObject.GetComponent<CanvasGroup>().alpha = 0f;
