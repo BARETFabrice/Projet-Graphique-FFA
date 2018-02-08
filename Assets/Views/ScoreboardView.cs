@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class ScoreboardView : MonoBehaviour {
 
+    CanvasGroup canvasGroup;
+
     public void Start()
     {
+        canvasGroup = gameObject.GetComponent<CanvasGroup>();
+
         // La vue écoute les différents événements qui ont un impacte sur cette dernière et agit en conséquence
         EventsManager.AddListener(EventsManager.Events.OpenScoreboard, OnOpenScoreboard);
         EventsManager.AddListener(EventsManager.Events.CloseScoreboard, OnCloseScoreboard);
@@ -18,13 +22,11 @@ public class ScoreboardView : MonoBehaviour {
     }
 
     public void OnOpenScoreboard() {
-        Debug.Log("open");
-        gameObject.GetComponent<CanvasGroup>().alpha = 1f;
+        canvasGroup.alpha = 1f;
     }
 
     public void OnCloseScoreboard()
     {
-        Debug.Log("close");
-        gameObject.GetComponent<CanvasGroup>().alpha = 0f;
+        canvasGroup.alpha = 0f;
     }
 }
