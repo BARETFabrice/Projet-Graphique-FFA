@@ -8,10 +8,14 @@ public static class EventsManager
 
     public enum Events:uint
     {
-        OpenScoreboard,
-        CloseScoreboard,
-        OpenPauseMenu,
-        ClosePauseMenu
+        TogglePauseMenu,
+
+
+
+        TabPressed,
+        TabReleased,
+
+        PPressed
     }
 
     public static void AddListener(Events a_EventId, UnityAction a_Action)
@@ -39,6 +43,10 @@ public static class EventsManager
         {
             thisEvent.RemoveListener(a_Action);
         }
+        else
+        {
+            Debug.LogError(" listener existe pas :(");
+        }
     }
 
     public static void TriggerEvent(Events a_EventId)
@@ -49,6 +57,7 @@ public static class EventsManager
 
         if (t_EventExists)
         {
+            Debug.Log(string.Format("Event {0} is triggered {1} times", a_EventId, thisEvent.GetPersistentEventCount()));
             thisEvent.Invoke();
         }
         else

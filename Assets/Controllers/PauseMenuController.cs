@@ -2,28 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PauseMenuController : MonoBehaviour
+public static class PauseMenuController
 {
-    public Transform pauseMenuCanvas;
-    private bool pauseMenuOpened = false;
+    static PauseMenuController() { EventsManager.AddListener(EventsManager.Events.PPressed, mettreEnPauseLeJeu); }
 
-	void Update ()
+    public static void mettreEnPauseLeJeu()
     {
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            mettreEnPauseLeJeu();
-        }
+        EventsManager.TriggerEvent(EventsManager.Events.TogglePauseMenu);
     }
 
-    public void mettreEnPauseLeJeu()
+    public static void OnButtonExitClicked()
     {
-        EventsManager.TriggerEvent(EventsManager.Events.OpenPauseMenu);
-        pauseMenuOpened = true;
+        //Ferme l'application et Unity Editor
+
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #else
+                Application.Quit();
+        #endif
     }
 
-    public void reprendreLeJeu()
+    public static void OnButtonQuitClicked()
     {
-        EventsManager.TriggerEvent(EventsManager.Events.ClosePauseMenu);
-        pauseMenuOpened = false;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
 }

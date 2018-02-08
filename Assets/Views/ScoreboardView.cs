@@ -11,14 +11,14 @@ public class ScoreboardView : MonoBehaviour {
         canvasGroup = gameObject.GetComponent<CanvasGroup>();
 
         // La vue écoute les différents événements qui ont un impacte sur cette dernière et agit en conséquence
-        EventsManager.AddListener(EventsManager.Events.OpenScoreboard, OnOpenScoreboard);
-        EventsManager.AddListener(EventsManager.Events.CloseScoreboard, OnCloseScoreboard);
+        EventsManager.AddListener(EventsManager.Events.TabPressed, OnOpenScoreboard);
+        EventsManager.AddListener(EventsManager.Events.TabReleased, OnCloseScoreboard);
     }
 
-    public void OnDisable()
+    public void OnDestroy()
     {
-        EventsManager.RemoveListener(EventsManager.Events.CloseScoreboard, OnCloseScoreboard);
-        EventsManager.AddListener(EventsManager.Events.OpenScoreboard, OnOpenScoreboard);
+        EventsManager.RemoveListener(EventsManager.Events.TabPressed, OnOpenScoreboard);
+        EventsManager.AddListener(EventsManager.Events.TabReleased, OnCloseScoreboard);
     }
 
     public void OnOpenScoreboard() {
