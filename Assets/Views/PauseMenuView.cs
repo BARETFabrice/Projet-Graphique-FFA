@@ -8,6 +8,10 @@ public class PauseMenuView : MonoBehaviour
 
     public void OnEnable()
     {
+        //gestion de la sourie a deplacer aprés
+        UnityEngine.Cursor.visible = false;
+
+
         gameObject.GetComponent<CanvasGroup>().alpha = 0f;
 
         EventsManager.AddListener(EventsManager.Events.PPressed, OnTogglePauseMenu);
