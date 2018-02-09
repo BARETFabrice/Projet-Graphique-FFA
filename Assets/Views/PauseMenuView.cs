@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PauseMenuView : MonoBehaviour
 {
+    private bool pauseMenuEnabled = false;
+
     public void OnEnable()
     {
         gameObject.GetComponent<CanvasGroup>().alpha = 0f;
@@ -20,11 +22,25 @@ public class PauseMenuView : MonoBehaviour
 
     public void OnTogglePauseMenu()
     {
-        gameObject.GetComponent<CanvasGroup>().alpha = 1f - gameObject.GetComponent<CanvasGroup>().alpha;
+        //gameObject.GetComponent<CanvasGroup>().alpha = 1f - gameObject.GetComponent<CanvasGroup>().alpha;
+
+        if(!pauseMenuEnabled)
+        {
+            gameObject.GetComponent<CanvasGroup>().interactable = true;
+            gameObject.GetComponent<CanvasGroup>().alpha = 1f;
+            pauseMenuEnabled = true;
+        }
+        else
+        {
+            gameObject.GetComponent<CanvasGroup>().interactable = false;
+            gameObject.GetComponent<CanvasGroup>().alpha = 0f;
+            pauseMenuEnabled = false;
+        }
     }
 
     public void OnButtonQuitClicked()
     {
+        gameObject.GetComponent<CanvasGroup>().interactable = false;
         PauseMenuController.OnButtonQuitClicked();
     }
 
