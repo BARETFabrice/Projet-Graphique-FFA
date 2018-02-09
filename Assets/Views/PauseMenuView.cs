@@ -29,12 +29,16 @@ public class PauseMenuView : MonoBehaviour
             gameObject.GetComponent<CanvasGroup>().interactable = true;
             gameObject.GetComponent<CanvasGroup>().alpha = 1f;
             pauseMenuEnabled = true;
+            
+            UnityEngine.Cursor.visible = true;
         }
         else
         {
             gameObject.GetComponent<CanvasGroup>().interactable = false;
             gameObject.GetComponent<CanvasGroup>().alpha = 0f;
             pauseMenuEnabled = false;
+
+            UnityEngine.Cursor.visible = false;
         }
     }
 
