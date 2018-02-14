@@ -218,6 +218,10 @@ Prefab:
       propertyPath: m_MouseLook.lockCursor
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_RunstepLenghten
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
   m_IsPrefabParent: 0
@@ -267,6 +271,16 @@ Prefab:
     - target: {fileID: 4031687944901620, guid: fd15cbfbcc06b1045828c0b855130e2f, type: 2}
       propertyPath: m_LocalPosition.z
       value: -0.179
+      objectReference: {fileID: 0}
+    - target: {fileID: 54491163433303218, guid: fd15cbfbcc06b1045828c0b855130e2f,
+        type: 2}
+      propertyPath: m_Mass
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 54679749068249032, guid: fd15cbfbcc06b1045828c0b855130e2f,
+        type: 2}
+      propertyPath: m_Mass
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fd15cbfbcc06b1045828c0b855130e2f, type: 2}
