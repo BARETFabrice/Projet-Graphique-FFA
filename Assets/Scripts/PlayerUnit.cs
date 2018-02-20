@@ -15,50 +15,6 @@ public class PlayerUnit : NetworkBehaviour {
     private float yaw = 0.0f;
     private float pitch = 0.0f;
 
-    bool shoot(/*Vector3 origin, Vector3 direction*/)
-    {
-        RaycastHit hitInfo;
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-
-        Physics.Raycast(ray, out hitInfo);
-
-        if (hitInfo.point == Vector3.zero)
-            hitInfo.point = ray.origin + (100 * ray.direction);
-
-        if(hitInfo.collider!=null)
-            Debug.Log(hitInfo.collider.gameObject.name);
-
-        CmddrawLaser(ray.origin,hitInfo.point);
-
-        if (hitInfo.collider && hitInfo.collider.gameObject.tag == "Player")
-        {
-            Debug.Log("kill");
-            return true;
-        }
-        return false;
-    }
-
-    [Command]
-    void CmddrawLaser(Vector3 start, Vector3 end)
-    {
-        RpcdrawLaser(start, end);
-    }
-
-    [ClientRpc]
-    void RpcdrawLaser(Vector3 start, Vector3 end) {
-        float duration = 30;
-
-        GameObject myLine = Instantiate(laser);
-        myLine.transform.position = start;
-        LineRenderer lr = myLine.GetComponent<LineRenderer>();
-        lr.SetPosition(0, start);
-        lr.SetPosition(1, end);
-
-        //NetworkServer.Spawn(myLine);
-
-        GameObject.Destroy(myLine, duration);
-    }
-
     // Use this for initialization
     void Start () {
 		cam = GetComponent<Camera> ();
@@ -72,6 +28,69 @@ public class PlayerUnit : NetworkBehaviour {
 		}
         cam.enabled = false;
         cam.enabled = true;
+	}
+
+	public void Die(){
+		Debug.Log ("Died");
+		if ( hasAuthority == false) {
+			return;
+		}
+		//NEED TO LOCK THE PLAYER IN POSITION SO HE DOESN'T FALL
+		this.GetComponentInChildren<MeshRenderer>().enabled = false;
+		this.GetComponentInChildren<CapsuleCollider>().enabled = false;
+
+		Invoke ("Respawn", 3f);
+	}
+
+	public void Respawn(){
+		this.transform.position = new Vector3 (0, 3, 0);
+		this.transform.rotation = Quaternion.Euler(0, 0, 0);
+		this.GetComponentInChildren<MeshRenderer>().enabled = true;
+		this.GetComponentInChildren<CapsuleCollider>().enabled = true;
+	}
+
+	bool shoot(/*Vector3 origin, Vector3 direction*/)
+	{
+		RaycastHit hitInfo;
+		Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+
+		Physics.Raycast(ray, out hitInfo);
+
+		if (hitInfo.point == Vector3.zero)
+			hitInfo.point = ray.origin + (100 * ray.direction);
+
+		if(hitInfo.collider!=null)
+			Debug.Log(hitInfo.collider.gameObject.name);
+
+		CmddrawLaser(ray.origin,hitInfo.point);
+
+		if (hitInfo.collider && hitInfo.collider.gameObject.tag == "Player")
+		{
+			Debug.Log("kill");
+			return true;
+		}
+		return false;
+	}
+
+	[Command]
+	void CmddrawLaser(Vector3 start, Vector3 end)
+	{
+		RpcdrawLaser(start, end);
+	}
+
+	[ClientRpc]
+	void RpcdrawLaser(Vector3 start, Vector3 end) {
+		float duration = 30;
+
+		GameObject myLine = Instantiate(laser);
+		myLine.transform.position = start;
+		LineRenderer lr = myLine.GetComponent<LineRenderer>();
+		lr.SetPosition(0, start);
+		lr.SetPosition(1, end);
+
+		//NetworkServer.Spawn(myLine);
+
+		GameObject.Destroy(myLine, duration);
 	}
 	
 	// Update is called once per frame
