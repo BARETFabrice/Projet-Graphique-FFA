@@ -39,7 +39,13 @@ public class PlayerUnit : NetworkBehaviour {
     }
 
     [Command]
-    void CmddrawLaser(Vector3 start, Vector3 end) {
+    void CmddrawLaser(Vector3 start, Vector3 end)
+    {
+        RpcdrawLaser(start, end);
+    }
+
+    [ClientRpc]
+    void RpcdrawLaser(Vector3 start, Vector3 end) {
         float duration = 30;
 
         GameObject myLine = Instantiate(laser);
@@ -48,7 +54,7 @@ public class PlayerUnit : NetworkBehaviour {
         lr.SetPosition(0, start);
         lr.SetPosition(1, end);
 
-        NetworkServer.Spawn(myLine);
+        //NetworkServer.Spawn(myLine);
 
         GameObject.Destroy(myLine, duration);
     }
