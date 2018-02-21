@@ -280,6 +280,8 @@ MonoBehaviour:
     BobDuration: 0.2
     BobAmount: 0.1
   m_StepInterval: 5
+  health: 1
+  laser: {fileID: 1226001362565576, guid: fceae234a18410144837ee5780dffbca, type: 2}
 --- !u!114 &114548696981152692
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -39,6 +39,18 @@ public class Player : NetworkBehaviour
     private bool m_Jumping;
     private AudioSource m_AudioSource;
 
+    private int kills = 0;
+    private int deaths = 0;
+
+    [SyncVar]
+    public int health = 1;
+    private bool isDead = false;
+
+    public GameObject laser;
+
+    private float yaw = 0.0f;
+    private float pitch = 0.0f;
+
     // Use this for initialization
     private void Start()
     {
@@ -52,14 +64,104 @@ public class Player : NetworkBehaviour
         m_Jumping = false;
         m_AudioSource = GetComponent<AudioSource>();
         m_MouseLook.Init(transform, m_Camera.transform);
-
-        
     }
+
+    private void CmdkillPlayer(PlayerUnit player)
+    {
+        player.health = 0;
+    }
+
+    public void Die()
+    {
+
+        deaths++;
+
+        if (hasAuthority == true)
+        {
+            Debug.Log("Died");
+        }
+        isDead = true;
+
+        this.GetComponentInChildren<MeshRenderer>().enabled = false;
+        this.GetComponentInChildren<CapsuleCollider>().enabled = false;
+        this.GetComponent<Rigidbody>().isKinematic = true;
+        Invoke("Respawn", 3f);
+    }
+
+    public void Respawn()
+    {
+        isDead = false;
+
+        this.transform.position = new Vector3(0, 3, 0);
+        this.transform.rotation = Quaternion.Euler(0, 0, 0);
+        this.GetComponentInChildren<MeshRenderer>().enabled = true;
+        this.GetComponentInChildren<CapsuleCollider>().enabled = true;
+        this.GetComponent<Rigidbody>().isKinematic = false;
+        health = 1;
+
+    }
+
+    bool shoot(/*Vector3 origin, Vector3 direction*/)
+    {
+        RaycastHit hitInfo;
+        Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
+
+        Physics.Raycast(ray, out hitInfo);
+
+        if (hitInfo.point == Vector3.zero)
+            hitInfo.point = ray.origin + (100 * ray.direction);
+
+        if (hitInfo.collider != null)
+            Debug.Log(hitInfo.collider.gameObject.name);
+
+        CmddrawLaser(ray.origin, hitInfo.point);
+
+        if (hitInfo.collider && hitInfo.collider.gameObject.tag == "Player")
+        {
+            PlayerUnit p = (PlayerUnit)hitInfo.collider.gameObject.GetComponentInParent(typeof(PlayerUnit));
+            CmdkillPlayer(p);
+
+            kills++;
+            return true;
+        }
+        return false;
+    }
+
+    [Command]
+    void CmddrawLaser(Vector3 start, Vector3 end)
+    {
+        RpcdrawLaser(start, end);
+    }
+
+    [ClientRpc]
+    void RpcdrawLaser(Vector3 start, Vector3 end)
+    {
+        float duration = 1;
+
+        GameObject myLine = Instantiate(laser);
+        myLine.transform.position = start;
+        LineRenderer lr = myLine.GetComponent<LineRenderer>();
+        lr.SetPosition(0, start);
+        lr.SetPosition(1, end);
+
+        //NetworkServer.Spawn(myLine);
+
+        GameObject.Destroy(myLine, duration);
+    }
+
 
     // Update is called once per frame
     private void Update()
     {
-        if(isLocalPlayer)
+        if (isDead)
+            return;
+        if (health == 0)
+        {
+            this.Die();
+            return;
+        }
+
+        if (isLocalPlayer)
         {
             if (!m_Camera.enabled)
                 m_Camera.enabled = true;
@@ -71,6 +173,7 @@ public class Player : NetworkBehaviour
         }
 
         RotateView();
+
         // the jump state needs to read here to make sure it is not missed
         if (!m_Jump)
         {
@@ -119,6 +222,11 @@ public class Player : NetworkBehaviour
 
         m_MoveDir.x = desiredMove.x * speed;
         m_MoveDir.z = desiredMove.z * speed;
+
+        if (Input.GetMouseButtonDown(0) && !isDead)
+        {
+            shoot(/*gameObject.transform.TransformVector(Vector3.zero), new Vector3(yaw / 90, -pitch / 90,0)*/);
+        }
 
 
         if (m_CharacterController.isGrounded)
