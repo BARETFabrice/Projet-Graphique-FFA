@@ -12,7 +12,6 @@ public class PlayerObject : NetworkBehaviour {
 			return;
 		}
 			
-		//UnitInstance = Instantiate (PlayerUnitPrefab);
 		CmdSpawnMyUnit();
 	}
 
@@ -20,36 +19,16 @@ public class PlayerObject : NetworkBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (isLocalPlayer == false) {
-			return;
-		}
-
-		if (Input.GetKeyDown (KeyCode.Space)) {
-			CmdMoveUnitUp ();
-		}
 	}
 
 	GameObject myPlayerUnit;
 
 	[Command]
 	void CmdSpawnMyUnit(){
-		GameObject go = Instantiate (PlayerUnitPrefab);
+		//Risque d'instancier la caméra avant de donner l'authority
+        myPlayerUnit = Instantiate (PlayerUnitPrefab);
+		//go.GetComponent<NetworkIdentity> ().AssignClientAuthority (connectionToClient);
 
-		myPlayerUnit = go;
-
-		NetworkServer.Spawn (go);
+		NetworkServer.SpawnWithClientAuthority (myPlayerUnit, connectionToClient);
 	}
-
-	[Command]
-	void CmdMoveUnitUp()
-	{
-		if (myPlayerUnit == null) {
-			return;
-		}
-		myPlayerUnit.transform.Translate (0, 1, 0);
-	}
-
-	/*void OnDestroy(){
-		Object.Destroy (UnitInstance);
-	}*/
 }

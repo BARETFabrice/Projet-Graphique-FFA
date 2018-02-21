@@ -9,8 +9,8 @@ public class PauseMenuView : MonoBehaviour
     public void OnEnable()
     {
         //gestion de la sourie a deplacer aprés
-        UnityEngine.Cursor.visible = false;
-        UnityEngine.Cursor.lockState = UnityEngine.CursorLockMode.Locked;
+        //UnityEngine.Cursor.visible = false;
+        //UnityEngine.Cursor.lockState = UnityEngine.CursorLockMode.Locked;
 
         gameObject.GetComponent<CanvasGroup>().alpha = 0f;
 
@@ -34,8 +34,8 @@ public class PauseMenuView : MonoBehaviour
             gameObject.GetComponent<CanvasGroup>().alpha = 1f;
             pauseMenuEnabled = true;
             
-            UnityEngine.Cursor.visible = true;
-            UnityEngine.Cursor.lockState = UnityEngine.CursorLockMode.None;
+            //UnityEngine.Cursor.visible = true;
+            //UnityEngine.Cursor.lockState = UnityEngine.CursorLockMode.None;
         }
         else
         {
@@ -43,8 +43,8 @@ public class PauseMenuView : MonoBehaviour
             gameObject.GetComponent<CanvasGroup>().alpha = 0f;
             pauseMenuEnabled = false;
 
-            UnityEngine.Cursor.visible = false;
-            UnityEngine.Cursor.lockState = UnityEngine.CursorLockMode.Locked;
+            //UnityEngine.Cursor.visible = false;
+            //UnityEngine.Cursor.lockState = UnityEngine.CursorLockMode.Locked;
         }
     }
 
