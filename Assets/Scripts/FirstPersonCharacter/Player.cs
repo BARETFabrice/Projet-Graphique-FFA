@@ -44,6 +44,8 @@ public class Player : NetworkBehaviour
 
     [SyncVar]
     public int health = 1;
+    [SyncVar]
+    public int id;
     private bool isDead = false;
 
     public GameObject laser;
@@ -54,6 +56,10 @@ public class Player : NetworkBehaviour
     // Use this for initialization
     private void Start()
     {
+        if (isServer)
+        {
+            id=PlayerStructure.getInstance().addPlayer(this);
+        }
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = this.gameObject.GetComponentInChildren<Camera>();
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -66,8 +72,10 @@ public class Player : NetworkBehaviour
         m_MouseLook.Init(transform, m_Camera.transform);
     }
 
-    private void CmdkillPlayer(Player player)
+    [Command]
+    private void CmdkillPlayer(int id)
     {
+        Player player = PlayerStructure.getInstance().getPlayer(id);
         player.health = 0;
     }
 
@@ -93,11 +101,12 @@ public class Player : NetworkBehaviour
     {
         isDead = false;
 
-        this.transform.position = new Vector3(0, 0, 0);
+        this.transform.position = new Vector3(0, 3, 0);
         this.transform.rotation = Quaternion.Euler(0, 0, 0);
         this.GetComponentInChildren<MeshRenderer>().enabled = true;
         this.GetComponentInChildren<CapsuleCollider>().enabled = true;
         this.GetComponent<Rigidbody>().isKinematic = false;
+        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
         health = 1;
 
     }
@@ -122,7 +131,7 @@ public class Player : NetworkBehaviour
         if (hitInfo.collider && hitInfo.collider.gameObject.name == "FirstPersonCharacter")
         {
             Player p = (Player)hitInfo.collider.gameObject.GetComponentInParent(typeof(Player));
-            CmdkillPlayer(p);
+            CmdkillPlayer(p.id);
 
             kills++;
             return true;
@@ -158,7 +167,7 @@ public class Player : NetworkBehaviour
     {
         if (isDead)
             return;
-        if (health == 0)
+        if (health <= 0)
         {
             this.Die();
             return;
@@ -202,6 +211,9 @@ public class Player : NetworkBehaviour
 
         float speed;
         GetInput(out speed);
+
+        if (isDead)
+            return;
 
         if (isLocalPlayer)
         {
