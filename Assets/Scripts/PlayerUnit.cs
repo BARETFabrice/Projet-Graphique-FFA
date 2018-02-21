@@ -26,7 +26,7 @@ public class PlayerUnit : NetworkBehaviour {
     void Start () {
 		cam = GetComponent<Camera> ();
 		body = GetComponent<Rigidbody>();
-		Invoke ("ReactivateCam", 0.1f);
+		Invoke ("ReactivateCam", 0.2f);
 	}
 
 	public void ReactivateCam(){
@@ -36,7 +36,7 @@ public class PlayerUnit : NetworkBehaviour {
         cam.enabled = false;
         cam.enabled = true;
 	}
-
+		
     private void CmdkillPlayer(PlayerUnit player)
     {
         player.health = 0;
@@ -52,11 +52,9 @@ public class PlayerUnit : NetworkBehaviour {
         }
         isDead = true;
 
-
-        //NEED TO LOCK THE PLAYER IN POSITION SO HE DOESN'T FALL
         this.GetComponentInChildren<MeshRenderer>().enabled = false;
 		this.GetComponentInChildren<CapsuleCollider>().enabled = false;
-
+		this.GetComponent<Rigidbody>().isKinematic = true;
 		Invoke ("Respawn", 3f);
 	}
 
@@ -67,6 +65,7 @@ public class PlayerUnit : NetworkBehaviour {
 		this.transform.rotation = Quaternion.Euler(0, 0, 0);
 		this.GetComponentInChildren<MeshRenderer>().enabled = true;
 		this.GetComponentInChildren<CapsuleCollider>().enabled = true;
+		this.GetComponent<Rigidbody>().isKinematic = false;
         health = 1;
 
     }
@@ -147,7 +146,7 @@ public class PlayerUnit : NetworkBehaviour {
 
         cam.transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !isDead)
         {
             shoot(/*gameObject.transform.TransformVector(Vector3.zero), new Vector3(yaw / 90, -pitch / 90,0)*/);
         }

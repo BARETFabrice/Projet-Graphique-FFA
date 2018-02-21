@@ -181,6 +181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedH: 2
   speedV: 2
+  health: 1
   laser: {fileID: 1226001362565576, guid: fceae234a18410144837ee5780dffbca, type: 2}
 --- !u!114 &114308436628511480
 MonoBehaviour:
