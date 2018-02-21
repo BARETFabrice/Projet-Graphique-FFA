@@ -10,6 +10,13 @@ public class PlayerUnit : NetworkBehaviour {
     public float speedH = 2.0f;
     public float speedV = 2.0f;
 
+    private int kills=0;
+    private int deaths = 0;
+
+    [SyncVar]
+    public int health = 1;
+    private bool isDead = false;
+
     public GameObject laser;
 
     private float yaw = 0.0f;
@@ -30,24 +37,39 @@ public class PlayerUnit : NetworkBehaviour {
         cam.enabled = true;
 	}
 
+    private void CmdkillPlayer(PlayerUnit player)
+    {
+        player.health = 0;
+    }
+
 	public void Die(){
-		Debug.Log ("Died");
-		if ( hasAuthority == false) {
-			return;
-		}
-		//NEED TO LOCK THE PLAYER IN POSITION SO HE DOESN'T FALL
-		this.GetComponentInChildren<MeshRenderer>().enabled = false;
+
+        deaths++;
+
+        if ( hasAuthority == true)
+        {
+            Debug.Log("Died");
+        }
+        isDead = true;
+
+
+        //NEED TO LOCK THE PLAYER IN POSITION SO HE DOESN'T FALL
+        this.GetComponentInChildren<MeshRenderer>().enabled = false;
 		this.GetComponentInChildren<CapsuleCollider>().enabled = false;
 
 		Invoke ("Respawn", 3f);
 	}
 
 	public void Respawn(){
-		this.transform.position = new Vector3 (0, 3, 0);
+        isDead = false;
+
+        this.transform.position = new Vector3 (0, 3, 0);
 		this.transform.rotation = Quaternion.Euler(0, 0, 0);
 		this.GetComponentInChildren<MeshRenderer>().enabled = true;
 		this.GetComponentInChildren<CapsuleCollider>().enabled = true;
-	}
+        health = 1;
+
+    }
 
 	bool shoot(/*Vector3 origin, Vector3 direction*/)
 	{
@@ -66,8 +88,11 @@ public class PlayerUnit : NetworkBehaviour {
 
 		if (hitInfo.collider && hitInfo.collider.gameObject.tag == "Player")
 		{
-			Debug.Log("kill");
-			return true;
+            PlayerUnit p = (PlayerUnit)hitInfo.collider.gameObject.GetComponentInParent(typeof(PlayerUnit));
+            CmdkillPlayer(p);
+
+            kills++;
+            return true;
 		}
 		return false;
 	}
@@ -80,7 +105,7 @@ public class PlayerUnit : NetworkBehaviour {
 
 	[ClientRpc]
 	void RpcdrawLaser(Vector3 start, Vector3 end) {
-		float duration = 30;
+		float duration = 1;
 
 		GameObject myLine = Instantiate(laser);
 		myLine.transform.position = start;
@@ -95,6 +120,13 @@ public class PlayerUnit : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (isDead)
+            return;
+        if (health == 0)
+        {
+            this.Die();
+            return;
+        }
 		if ( hasAuthority == false) {
 			return;
 		}
