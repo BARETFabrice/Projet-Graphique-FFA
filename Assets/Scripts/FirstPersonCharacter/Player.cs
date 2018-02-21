@@ -66,7 +66,7 @@ public class Player : NetworkBehaviour
         m_MouseLook.Init(transform, m_Camera.transform);
     }
 
-    private void CmdkillPlayer(PlayerUnit player)
+    private void CmdkillPlayer(Player player)
     {
         player.health = 0;
     }
@@ -80,6 +80,7 @@ public class Player : NetworkBehaviour
         {
             Debug.Log("Died");
         }
+
         isDead = true;
 
         this.GetComponentInChildren<MeshRenderer>().enabled = false;
@@ -92,7 +93,7 @@ public class Player : NetworkBehaviour
     {
         isDead = false;
 
-        this.transform.position = new Vector3(0, 3, 0);
+        this.transform.position = new Vector3(0, 0, 0);
         this.transform.rotation = Quaternion.Euler(0, 0, 0);
         this.GetComponentInChildren<MeshRenderer>().enabled = true;
         this.GetComponentInChildren<CapsuleCollider>().enabled = true;
@@ -120,13 +121,8 @@ public class Player : NetworkBehaviour
 
         if (hitInfo.collider && hitInfo.collider.gameObject.name == "FirstPersonCharacter")
         {
-            Debug.Log("kill");
-
-            
-            /*PlayerUnit p = (PlayerUnit)hitInfo.collider.gameObject.GetComponentInParent(typeof(PlayerUnit));
-            CmdkillPlayer(p);*/
-
-
+            Player p = (Player)hitInfo.collider.gameObject.GetComponentInParent(typeof(Player));
+            CmdkillPlayer(p);
 
             kills++;
             return true;
