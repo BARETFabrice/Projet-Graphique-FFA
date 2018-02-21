@@ -116,10 +116,17 @@ public class Player : NetworkBehaviour
 
         CmddrawLaser(ray.origin, hitInfo.point);
 
-        if (hitInfo.collider && hitInfo.collider.gameObject.tag == "Player")
+
+
+        if (hitInfo.collider && hitInfo.collider.gameObject.name == "FirstPersonCharacter")
         {
-            PlayerUnit p = (PlayerUnit)hitInfo.collider.gameObject.GetComponentInParent(typeof(PlayerUnit));
-            CmdkillPlayer(p);
+            Debug.Log("kill");
+
+            
+            /*PlayerUnit p = (PlayerUnit)hitInfo.collider.gameObject.GetComponentInParent(typeof(PlayerUnit));
+            CmdkillPlayer(p);*/
+
+
 
             kills++;
             return true;
