@@ -42,7 +42,7 @@ public class Player : NetworkBehaviour
     private int kills = 0;
     private int deaths = 0;
 
-    [SyncVar]
+    [SyncVar(hook = "healthChanged")]
     public int health = 1;
     [SyncVar]
     public int id;
@@ -79,6 +79,15 @@ public class Player : NetworkBehaviour
         player.health = 0;
     }
 
+    private void healthChanged(int newHp)
+    {
+        health = newHp;
+        if (health <= 0)
+        {
+            this.Die();
+        }
+    }
+
     public void Die()
     {
 
@@ -92,7 +101,7 @@ public class Player : NetworkBehaviour
         isDead = true;
 
         this.GetComponentInChildren<MeshRenderer>().enabled = false;
-        this.GetComponentInChildren<CapsuleCollider>().enabled = false;
+        this.GetComponent<CharacterController>().enabled = false;
         this.GetComponent<Rigidbody>().isKinematic = true;
         Invoke("Respawn", 3f);
     }
@@ -101,12 +110,16 @@ public class Player : NetworkBehaviour
     {
         isDead = false;
 
-        this.transform.position = new Vector3(0, 3, 0);
-        this.transform.rotation = Quaternion.Euler(0, 0, 0);
+        if (hasAuthority)
+        {
+            this.transform.position = new Vector3(0, 3, 0);
+            this.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+
         this.GetComponentInChildren<MeshRenderer>().enabled = true;
-        this.GetComponentInChildren<CapsuleCollider>().enabled = true;
+        this.GetComponent<CharacterController>().enabled = true;
         this.GetComponent<Rigidbody>().isKinematic = false;
-        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //this.GetComponent<Rigidbody>().velocity = Vector3.zero;
         health = 1;
 
     }
@@ -128,9 +141,9 @@ public class Player : NetworkBehaviour
 
 
 
-        if (hitInfo.collider && hitInfo.collider.gameObject.name == "FirstPersonCharacter")
+        if (hitInfo.collider && hitInfo.collider.tag == "Player")
         {
-            Player p = (Player)hitInfo.collider.gameObject.GetComponentInParent(typeof(Player));
+            Player p = (Player)hitInfo.collider.gameObject.GetComponent(typeof(Player));
             CmdkillPlayer(p.id);
 
             kills++;
@@ -165,13 +178,11 @@ public class Player : NetworkBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.K))
+            Die();
+
         if (isDead)
             return;
-        if (health <= 0)
-        {
-            this.Die();
-            return;
-        }
 
         if (isLocalPlayer)
         {

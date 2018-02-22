@@ -281,6 +281,7 @@ MonoBehaviour:
     BobAmount: 0.1
   m_StepInterval: 5
   health: 1
+  id: 0
   laser: {fileID: 1226001362565576, guid: fceae234a18410144837ee5780dffbca, type: 2}
 --- !u!114 &114548696981152692
 MonoBehaviour:
@@ -311,7 +312,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 1129089687760246}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
