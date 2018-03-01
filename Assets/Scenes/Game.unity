@@ -470,11 +470,6 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114624394020537088, guid: 96e862e05ab7e96438f2620a4484def8,
-        type: 2}
-      propertyPath: crosshairImage
-      value: 
-      objectReference: {fileID: 2800000, guid: 10a88e3cc46c9134186dcda55afa3222, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 96e862e05ab7e96438f2620a4484def8, type: 2}
   m_IsPrefabParent: 0
