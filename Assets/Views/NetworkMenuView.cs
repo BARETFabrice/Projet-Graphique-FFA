@@ -3,14 +3,30 @@ using UnityEngine.UI;
 
 public class NetworkMenuView : MonoBehaviour
 {
-	
-    public void OnButtonPlayClicked()
+	private NetworkMenuController myController;
+
+	private void Awake()
+	{
+		myController = GetComponent<NetworkMenuController>();
+	}
+
+    public void OnButtonHostClicked()
     {
-        MainMenuController.LoadPlayScene();
+		myController.HostGame();
     }
 
-	public void OnButtonQuitClicked()
+	public void OnButtonJoinClicked()
 	{
-		MainMenuController.QuitGame();
+		myController.JoinGame();
+	}
+
+	public void OnButtonServerListClicked()
+	{
+		myController.LoadListServer();
+	}
+
+	public void onButtonReturnClicked()
+	{
+		myController.LoadMainMenuScene();
 	}
 }
