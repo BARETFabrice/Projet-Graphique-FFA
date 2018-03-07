@@ -7,7 +7,7 @@ public static class MainMenuController
     public static void LoadPlayScene()
     {
         // Exécution du traitement
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("NetworkMenu");
     }
 
 	public static void QuitGame()
