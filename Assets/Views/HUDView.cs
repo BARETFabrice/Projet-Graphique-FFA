@@ -11,6 +11,7 @@ public class HUDView : MonoBehaviour {
     void OnGUI()
     {
         drawCrosshair();
+        InvokeRepeating("drawHud", 0.1f, 0.9f);
     }
 
     void drawCrosshair()
@@ -18,6 +19,11 @@ public class HUDView : MonoBehaviour {
         float xMin = (Screen.width / 2) - (crosshairImage.width / 2);
         float yMin = (Screen.height / 2) - (crosshairImage.height / 2);
         GUI.DrawTexture(new Rect(xMin, yMin, crosshairImage.width, crosshairImage.height), crosshairImage);
+    }
+
+    void drawHud()
+    {
+        timer.text=HUDController.getTimer();
     }
 
     // Use this for initialization

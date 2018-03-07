@@ -6,13 +6,26 @@ using UnityEngine.Networking;
 public class GameManager : NetworkBehaviour {
 
     float timeLeft;
+    static GameManager instance=null;
+
+    public static GameManager getInstance()
+    {
+        return instance;
+    }
 
     public string getTimer()
     {
         int minutes = (int)(timeLeft / 60);
         int seconds = (int)(timeLeft - (minutes * 60));
 
-        return "" + minutes + ":" + seconds;
+        string timer = "" + minutes + ":";
+
+        if (seconds < 10)
+            timer += '0';
+
+        timer += seconds;
+
+        return timer;
     }
 
     [Command]
@@ -34,6 +47,8 @@ public class GameManager : NetworkBehaviour {
 
     // Use this for initialization
     void Start () {
+        instance = this;
+
         setTime(600);
 
         if (isServer)
