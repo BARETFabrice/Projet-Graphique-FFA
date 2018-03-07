@@ -10,7 +10,8 @@ public static class EventsManager
     {
         TogglePauseMenu,
 
-
+        died,
+        respawned,
 
         TabPressed,
         TabReleased,

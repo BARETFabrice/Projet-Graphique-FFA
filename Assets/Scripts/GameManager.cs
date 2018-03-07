@@ -15,8 +15,13 @@ public class GameManager : NetworkBehaviour {
 
     public string getTimer()
     {
-        int minutes = (int)(timeLeft / 60);
-        int seconds = (int)(timeLeft - (minutes * 60));
+        uint time = 0;
+
+        if(timeLeft>0)
+            time = (uint)timeLeft;
+
+        uint minutes = time / 60;
+        uint seconds = time - (minutes * 60);
 
         string timer = "" + minutes + ":";
 
