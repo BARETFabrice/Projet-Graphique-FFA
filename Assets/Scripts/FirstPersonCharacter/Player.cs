@@ -134,9 +134,6 @@ public class Player : NetworkBehaviour
         if (hitInfo.point == Vector3.zero)
             hitInfo.point = ray.origin + (100 * ray.direction);
 
-        if (hitInfo.collider != null)
-            Debug.Log(hitInfo.collider.gameObject.name);
-
         CmddrawLaser(ray.origin, hitInfo.point);
 
 

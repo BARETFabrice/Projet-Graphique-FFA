@@ -25,8 +25,6 @@ public class PlayerStructure
     {
         liste.Add(p);
 
-        Debug.Log("added " + (liste.Count-1));
-
         return liste.Count-1;
     }
 
