@@ -20,11 +20,6 @@ public class NetworkMenuView : MonoBehaviour
 		myController.JoinGame();
 	}
 
-	public void OnButtonServerListClicked()
-	{
-		myController.LoadListServer();
-	}
-
 	public void onButtonReturnClicked()
 	{
 		myController.LoadMainMenuScene();
