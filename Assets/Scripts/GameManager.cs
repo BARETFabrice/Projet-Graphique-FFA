@@ -5,8 +5,22 @@ using UnityEngine.Networking;
 
 public class GameManager : NetworkBehaviour {
 
-    float timeLeft;
-    static GameManager instance=null;
+    [SyncVar(hook = "OnSyncedTimeLeftChanged")]
+    private float syncedTimeLeft;
+
+    private float localTimeLeft;
+    private static GameManager instance=null;
+
+    private void OnSyncedTimeLeftChanged(float newValue)
+    {
+        syncedTimeLeft = newValue;
+        localTimeLeft = syncedTimeLeft;
+    }
+
+    public void SyncVarTimeLeft()
+    {
+        syncedTimeLeft = localTimeLeft;
+    }
 
     public static GameManager getInstance()
     {
@@ -17,8 +31,8 @@ public class GameManager : NetworkBehaviour {
     {
         uint time = 0;
 
-        if(timeLeft>0)
-            time = (uint)timeLeft;
+        if(localTimeLeft>0)
+            time = (uint)localTimeLeft;
 
         uint minutes = time / 60;
         uint seconds = time - (minutes * 60);
@@ -33,44 +47,35 @@ public class GameManager : NetworkBehaviour {
         return timer;
     }
 
-    [Command]
-    void CmdSyncTimeLeft()
+    private void Awake()
     {
-        RpcSyncTimeLeft(timeLeft);
-    }
+        Debug.Log("GameManager Awake");
 
-    [ClientRpc]
-    void RpcSyncTimeLeft(float timeLeft)
-    {
-        setTime(timeLeft);
+        instance = this;
+        localTimeLeft = 600;
     }
-
-    void setTime(float time)
-    {
-        timeLeft = time;
-    }
-
     // Use this for initialization
     void Start () {
-        instance = this;
-
-        setTime(600);
+        Debug.Log("GameManager Start");
 
         if (isServer)
-            InvokeRepeating("CmdSyncTimeLeft", 1.0f, 50F);
+        {
+            InvokeRepeating("SyncVarTimeLeft", 0.1f, 10F);
+        }
+        else
+            localTimeLeft = syncedTimeLeft;
     }
 
-    [Command]
-    void CmdEndGame()
+    void endGame()
     {
 
     }
 	
 	// Update is called once per frame
 	void Update () {
-        timeLeft -= Time.deltaTime;
+        localTimeLeft -= Time.deltaTime;
 
-        if (isServer && timeLeft < 0)
-            CmdEndGame();
+        if (isServer && localTimeLeft < 0)
+            endGame();
     }
 }
