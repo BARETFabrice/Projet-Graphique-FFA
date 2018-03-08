@@ -9,30 +9,73 @@ public class NetworkMenuController : MonoBehaviour
     public void HostGame()
     {
 		NetworkManager.singleton.StartMatchMaker ();
-		NetworkManager.singleton.matchMaker.CreateMatch("test", 4, true, "", "", "", 0, 0, OnMatchCreate);
+		NetworkManager.singleton.matchMaker.CreateMatch("test", 4, true, "", "", "", 0, 0, OnInternetMatchCreate);
     }
 
 	public void JoinGame()
 	{
-
+		NetworkManager.singleton.matchMaker.ListMatches(0, 10, "test", true, 0, 0, OnInternetMatchList);
 	}
-
-	public void LoadListServer()
-	{
 		
-	}
-
 	public void LoadMainMenuScene()
 	{
 		SceneManager.LoadScene("MainMenu");
 	}
 
-	public void OnMatchCreate(bool success, string extendedInfo, MatchInfo matchInfo)
+	private void OnInternetMatchCreate(bool success, string extendedInfo, MatchInfo matchInfo)
 	{
-		if (success) 
+		if (success)
 		{
+			//Debug.Log("Create match succeeded");
+
 			MatchInfo hostInfo = matchInfo;
-			NetworkManager.singleton.StartClient (hostInfo);
+			NetworkServer.Listen(hostInfo, 9000);
+
+			NetworkManager.singleton.StartHost(hostInfo);
+			SceneManager.LoadScene("Game");
+		}
+		else
+		{
+			Debug.LogError("Create match failed");
+		}
+	}
+
+	private void OnInternetMatchList(bool success, string extendedInfo, List<MatchInfoSnapshot> matches)
+	{
+		Debug.Log (success);
+		if (success)
+		{
+			if (matches.Count != 0)
+			{
+				Debug.Log("A list of matches was returned");
+
+				//join the last server (just in case there are two...)
+				NetworkManager.singleton.matchMaker.JoinMatch(matches[matches.Count - 1].networkId, "", "", "", 0, 0, OnJoinInternetMatch);
+			}
+			else
+			{
+				Debug.Log("No matches in requested room!");
+			}
+		}
+		else
+		{
+			Debug.LogError("Couldn't connect to match maker");
+		}
+	}
+
+	private void OnJoinInternetMatch(bool success, string extendedInfo, MatchInfo matchInfo)
+	{
+		if (success)
+		{
+			//Debug.Log("Able to join a match");
+
+			MatchInfo hostInfo = matchInfo;
+			NetworkManager.singleton.StartClient(hostInfo);
+			SceneManager.LoadScene("Game");
+		}
+		else
+		{
+			Debug.LogError("Join match failed");
 		}
 	}
 }
