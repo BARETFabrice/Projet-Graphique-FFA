@@ -12,4 +12,13 @@ public class NetworkManagerFFA : NetworkManager
         if(GameManager.getInstance() != null)
             GameManager.getInstance().SyncVarTimeLeft();
     }
+
+    public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
+    {
+        Debug.Log("OnServerAddPlayer");
+
+        base.OnServerAddPlayer(conn, playerControllerId);
+
+        NetworkServer.SpawnObjects();
+    }
 }

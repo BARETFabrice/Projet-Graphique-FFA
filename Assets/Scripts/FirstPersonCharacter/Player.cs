@@ -56,6 +56,7 @@ public class Player : NetworkBehaviour
     // Use this for initialization
     private void Start()
     {
+
         if (isServer)
         {
             id=PlayerStructure.getInstance().addPlayer(this);

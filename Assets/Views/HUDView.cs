@@ -11,7 +11,6 @@ public class HUDView : MonoBehaviour {
     void OnGUI()
     {
         drawCrosshair();
-        InvokeRepeating("drawHud", 0.1f, 0.9f);
     }
 
     void drawCrosshair()
@@ -28,8 +27,8 @@ public class HUDView : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
-	}
+        InvokeRepeating("drawHud",0.1F,0.9F);
+    }
 	
 	// Update is called once per frame
 	void Update () {

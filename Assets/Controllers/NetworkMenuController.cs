@@ -6,9 +6,13 @@ using UnityEngine.Networking.Match;
 
 public class NetworkMenuController : MonoBehaviour
 {
+    public void Start()
+    {
+        NetworkManager.singleton.StartMatchMaker();
+    }
     public void HostGame()
     {
-		NetworkManager.singleton.StartMatchMaker ();
+		
 		NetworkManager.singleton.matchMaker.CreateMatch("test", 4, true, "", "", "", 0, 0, OnInternetMatchCreate);
     }
 
@@ -32,8 +36,9 @@ public class NetworkMenuController : MonoBehaviour
 			NetworkServer.Listen(hostInfo, 9000);
 
 			NetworkManager.singleton.StartHost(hostInfo);
-			SceneManager.LoadScene("Game");
-		}
+
+            SceneManager.LoadScene("Game");
+        }
 		else
 		{
 			Debug.LogError("Create match failed");
