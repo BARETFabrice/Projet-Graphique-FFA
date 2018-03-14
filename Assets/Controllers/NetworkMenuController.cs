@@ -8,17 +8,17 @@ public class NetworkMenuController : MonoBehaviour
 {
     public void Start()
     {
-        NetworkManager.singleton.StartMatchMaker();
+        NetworkManagerFFA.instance.StartMatchMaker();
     }
     public void HostGame()
     {
 		
-		NetworkManager.singleton.matchMaker.CreateMatch("test", 4, true, "", "", "", 0, 0, OnInternetMatchCreate);
+		NetworkManagerFFA.instance.matchMaker.CreateMatch("test", 4, true, "", "", "", 0, 0, OnInternetMatchCreate);
     }
 
 	public void JoinGame()
 	{
-		NetworkManager.singleton.matchMaker.ListMatches(0, 10, "test", true, 0, 0, OnInternetMatchList);
+		NetworkManagerFFA.instance.matchMaker.ListMatches(0, 10, "test", true, 0, 0, OnInternetMatchList);
 	}
 		
 	public void LoadMainMenuScene()
@@ -35,9 +35,9 @@ public class NetworkMenuController : MonoBehaviour
 			MatchInfo hostInfo = matchInfo;
 			NetworkServer.Listen(hostInfo, 9000);
 
-			NetworkManager.singleton.StartHost(hostInfo);
+			NetworkManagerFFA.instance.StartHost(hostInfo);
 
-            SceneManager.LoadScene("Game");
+            //SceneManager.LoadScene("Game");
         }
 		else
 		{
@@ -55,7 +55,7 @@ public class NetworkMenuController : MonoBehaviour
 				Debug.Log("A list of matches was returned");
 
 				//join the last server (just in case there are two...)
-				NetworkManager.singleton.matchMaker.JoinMatch(matches[matches.Count - 1].networkId, "", "", "", 0, 0, OnJoinInternetMatch);
+				NetworkManagerFFA.instance.matchMaker.JoinMatch(matches[matches.Count - 1].networkId, "", "", "", 0, 0, OnJoinInternetMatch);
 			}
 			else
 			{
@@ -75,8 +75,8 @@ public class NetworkMenuController : MonoBehaviour
 			//Debug.Log("Able to join a match");
 
 			MatchInfo hostInfo = matchInfo;
-			NetworkManager.singleton.StartClient(hostInfo);
-			SceneManager.LoadScene("Game");
+			NetworkManagerFFA.instance.StartClient(hostInfo);
+			//SceneManager.LoadScene("Game");
 		}
 		else
 		{
