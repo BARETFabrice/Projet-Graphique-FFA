@@ -25,6 +25,8 @@ public class Player : NetworkBehaviour
     [SerializeField] private LerpControlledBob m_JumpBob = new LerpControlledBob();
     [SerializeField] private float m_StepInterval;
 
+    private PlayerNetwork playerNetwork;
+
     private Camera m_Camera;
     private bool m_Jump;
     private float m_YRotation;
@@ -50,6 +52,10 @@ public class Player : NetworkBehaviour
 
     public GameObject laser;
 
+    public void setPlayerNetwork(PlayerNetwork p)
+    {
+        playerNetwork = p;
+    }
 
     // Use this for initialization
     private void Start()
@@ -58,9 +64,7 @@ public class Player : NetworkBehaviour
         if (isServer)
         {
             id=PlayerStructure.getInstance().addPlayer(this);
-        }
-
-			
+        }			
 
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = this.gameObject.GetComponentInChildren<Camera>();
@@ -98,7 +102,6 @@ public class Player : NetworkBehaviour
 
     public void Die()
     {
-
         deaths++;
 
         if (hasAuthority == true)
@@ -111,16 +114,17 @@ public class Player : NetworkBehaviour
         this.GetComponentInChildren<MeshRenderer>().enabled = false;
         this.GetComponent<CharacterController>().enabled = false;
         this.GetComponent<Rigidbody>().isKinematic = true;
-        Invoke("Respawn", 3f);
+
+        playerNetwork.died();
     }
 
-    public void Respawn()
+    public void Respawn(Vector3 position)
     {
         isDead = false;
 
         if (hasAuthority)
         {
-            this.transform.position = new Vector3(0, 3, 0);
+            this.transform.position = position;
             this.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
 
@@ -132,7 +136,7 @@ public class Player : NetworkBehaviour
 
     }
 
-    bool shoot(/*Vector3 origin, Vector3 direction*/)
+    bool shoot()
     {
         RaycastHit hitInfo;
         Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
@@ -183,6 +187,8 @@ public class Player : NetworkBehaviour
     // Update is called once per frame
     private void Update()
     {
+        //if (Input.GetKeyDown(KeyCode.L))
+            //Die();
 
         if (isDead)
             return;

@@ -8,6 +8,7 @@ public class PlayerNetwork : NetworkBehaviour {
 
 	public GameObject playerH;
 	private GameObject playerUnit;
+    private Player player;
 
     private void Awake()
     {
@@ -24,10 +25,22 @@ public class PlayerNetwork : NetworkBehaviour {
 	[Command]
 	void CmdSpawnMyUnit()
 	{
-		GameObject p = Instantiate(playerH);
-		playerUnit = p;
-		NetworkServer.SpawnWithClientAuthority (playerUnit, connectionToClient);
+        playerUnit = Instantiate(playerH);
+        player = playerUnit.GetComponent<Player>();
+        player.setPlayerNetwork(this);
+        Respawn();
+        NetworkServer.SpawnWithClientAuthority (playerUnit, connectionToClient);
 	}
+
+    public void died()
+    {
+        Invoke("Respawn", 3f);
+    }
+
+    private void Respawn()
+    {
+        player.Respawn(new Vector3(0, 3, 0));
+    }
 
 	// Update is called once per frame
 	void Update () {
