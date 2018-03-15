@@ -50,8 +50,6 @@ public class Player : NetworkBehaviour
 
     public GameObject laser;
 
-    private float yaw = 0.0f;
-    private float pitch = 0.0f;
 
     // Use this for initialization
     private void Start()
@@ -61,6 +59,9 @@ public class Player : NetworkBehaviour
         {
             id=PlayerStructure.getInstance().addPlayer(this);
         }
+
+			
+
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = this.gameObject.GetComponentInChildren<Camera>();
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -72,6 +73,12 @@ public class Player : NetworkBehaviour
         m_AudioSource = GetComponent<AudioSource>();
         m_MouseLook.Init(transform, m_Camera.transform);
     }
+
+
+	public override void OnStartAuthority()
+	{
+		m_Camera.enabled = true;
+	}
 
     [Command]
     private void CmdkillPlayer(int id)
@@ -176,21 +183,13 @@ public class Player : NetworkBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-            Die();
 
         if (isDead)
             return;
 
-        if (isLocalPlayer)
+		if (!hasAuthority)
         {
-            if (!m_Camera.enabled)
-                m_Camera.enabled = true;
-        }
-        else
-        {
-            m_Camera.enabled = false;
-            return;
+			return;
         }
 
         RotateView();
@@ -221,19 +220,8 @@ public class Player : NetworkBehaviour
         float speed;
         GetInput(out speed);
 
-        if (isDead)
+		if (isDead || !hasAuthority)
             return;
-
-        if (isLocalPlayer)
-        {
-            if (!m_Camera.enabled)
-                m_Camera.enabled = true;
-        }
-        else
-        {
-            m_Camera.enabled = false;
-            return;
-        }
 
         // always move along the camera forward as it is the direction that it being aimed at
         Vector3 desiredMove = transform.forward * m_Input.y + transform.right * m_Input.x;
@@ -295,16 +283,9 @@ public class Player : NetworkBehaviour
 
     private void UpdateCameraPosition(float speed)
     {
-        if (isLocalPlayer)
-        {
-            if (!m_Camera.enabled)
-                m_Camera.enabled = true;
-        }
-        else
-        {
-            m_Camera.enabled = false;
-            return;
-        }
+
+		if (isDead || !hasAuthority)
+			return;
 
         Vector3 newCameraPosition;
         if (!m_UseHeadBob)
@@ -364,16 +345,6 @@ public class Player : NetworkBehaviour
 
     private void RotateView()
     {
-        if (isLocalPlayer)
-        {
-            if (!m_Camera.enabled)
-                m_Camera.enabled = true;
-        }
-        else
-        {
-            m_Camera.enabled = false;
-            return;
-        }
 
         m_MouseLook.LookRotation(transform, m_Camera.transform);
     }
@@ -381,16 +352,6 @@ public class Player : NetworkBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (isLocalPlayer)
-        {
-            if (!m_Camera.enabled)
-                m_Camera.enabled = true;
-        }
-        else
-        {
-            m_Camera.enabled = false;
-            return;
-        }
 
         Rigidbody body = hit.collider.attachedRigidbody;
         //dont move the rigidbody if the character is on top of it
