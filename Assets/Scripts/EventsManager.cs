@@ -13,6 +13,8 @@ public static class EventsManager
         died,
         respawned,
 
+        gameEnded,
+
         TabPressed,
         TabReleased,
 

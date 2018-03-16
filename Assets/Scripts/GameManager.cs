@@ -8,7 +8,7 @@ public class GameManager : NetworkBehaviour {
     [SyncVar(hook = "OnSyncedTimeLeftChanged")]
     private float syncedTimeLeft;
 
-    private float localTimeLeft;
+    private float localTimeLeft = 0;
     private static GameManager instance=null;
 
     private void OnSyncedTimeLeftChanged(float newValue)
@@ -29,10 +29,10 @@ public class GameManager : NetworkBehaviour {
 
     public string getTimer()
     {
-        uint time = 0;
+        if (localTimeLeft <= 0)
+            return "";
 
-        if(localTimeLeft>0)
-            time = (uint)localTimeLeft;
+        uint time = (uint)localTimeLeft;
 
         uint minutes = time / 60;
         uint seconds = time - (minutes * 60);
@@ -49,7 +49,6 @@ public class GameManager : NetworkBehaviour {
 
     private void Awake()
     {
-
         instance = this;
     }
     // Use this for initialization
@@ -67,6 +66,15 @@ public class GameManager : NetworkBehaviour {
     void endGame()
     {
 
+
+        EventsManager.TriggerEvent(EventsManager.Events.gameEnded);
+        RpcTriggerEndGame();
+    }
+
+    [ClientRpc]
+    void RpcTriggerEndGame()
+    {
+        EventsManager.TriggerEvent(EventsManager.Events.gameEnded);
     }
 	
 	// Update is called once per frame
