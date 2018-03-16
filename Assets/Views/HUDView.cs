@@ -40,7 +40,7 @@ public class HUDView : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        InvokeRepeating("drawHud",0.1F,0.9F);
+        InvokeRepeating("drawHud",0.1F,0.5F);
 
         EventsManager.AddListener(EventsManager.Events.died, showDeathMessage);
         EventsManager.AddListener(EventsManager.Events.respawned, hideDeathMessage);

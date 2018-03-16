@@ -140,7 +140,7 @@ public class Player : NetworkBehaviour
             hitInfo.point = ray.origin + (100 * ray.direction);
 
         CmddrawLaser(ray.origin, hitInfo.point);
-
+        drawLaser(ray.origin, hitInfo.point);
 
 
         if (hitInfo.collider && hitInfo.collider.tag == "Player")
@@ -162,6 +162,12 @@ public class Player : NetworkBehaviour
 
     [ClientRpc]
     void RpcdrawLaser(Vector3 start, Vector3 end)
+    {
+        if (!hasAuthority)
+            drawLaser(start, end);
+    }
+
+    void drawLaser(Vector3 start, Vector3 end)
     {
         float duration = 1;
 
