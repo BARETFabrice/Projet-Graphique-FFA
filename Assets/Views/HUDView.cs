@@ -7,10 +7,12 @@ public class HUDView : MonoBehaviour {
 
     public Texture2D crosshairImage;
     public Text timer;
+    public GameObject deathMessage;
 
     void OnGUI()
     {
-        drawCrosshair();
+        if(!deathMessage.activeSelf)
+            drawCrosshair();
     }
 
     void drawCrosshair()
@@ -25,9 +27,23 @@ public class HUDView : MonoBehaviour {
         timer.text=HUDController.getTimer();
     }
 
+    public void showDeathMessage()
+    {
+        deathMessage.SetActive(true);
+    }
+
+    public void hideDeathMessage()
+    {
+        deathMessage.SetActive(false);
+    }
+
+
     // Use this for initialization
     void Start () {
         InvokeRepeating("drawHud",0.1F,0.9F);
+
+        EventsManager.AddListener(EventsManager.Events.died, showDeathMessage);
+        EventsManager.AddListener(EventsManager.Events.respawned, hideDeathMessage);
     }
 	
 	// Update is called once per frame

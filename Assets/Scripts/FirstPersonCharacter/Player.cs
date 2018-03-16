@@ -25,8 +25,6 @@ public class Player : NetworkBehaviour
     [SerializeField] private LerpControlledBob m_JumpBob = new LerpControlledBob();
     [SerializeField] private float m_StepInterval;
 
-    private PlayerNetwork playerNetwork;
-
     private Camera m_Camera;
     private bool m_Jump;
     private float m_YRotation;
@@ -52,11 +50,6 @@ public class Player : NetworkBehaviour
 
     public GameObject laser;
 
-    public void setPlayerNetwork(PlayerNetwork p)
-    {
-        playerNetwork = p;
-    }
-
     // Use this for initialization
     private void Start()
     {
@@ -81,7 +74,8 @@ public class Player : NetworkBehaviour
 
 	public override void OnStartAuthority()
 	{
-		m_Camera.enabled = true;
+        m_Camera = this.gameObject.GetComponentInChildren<Camera>();
+        m_Camera.enabled = true;
 	}
 
     [Command]
@@ -104,34 +98,33 @@ public class Player : NetworkBehaviour
     {
         deaths++;
 
-        if (hasAuthority == true)
-        {
-            Debug.Log("Died");
-        }
-
         isDead = true;
 
         this.GetComponentInChildren<MeshRenderer>().enabled = false;
         this.GetComponent<CharacterController>().enabled = false;
         this.GetComponent<Rigidbody>().isKinematic = true;
 
-        playerNetwork.died();
+        Invoke("Respawn", 3f);
+
+        if (hasAuthority)
+            EventsManager.TriggerEvent(EventsManager.Events.died);
     }
 
-    public void Respawn(Vector3 position)
+    public void Respawn()
     {
         isDead = false;
 
         if (hasAuthority)
         {
+            Vector3 position = new Vector3(0, 3, 0);
             this.transform.position = position;
             this.transform.rotation = Quaternion.Euler(0, 0, 0);
+            EventsManager.TriggerEvent(EventsManager.Events.respawned);
         }
 
         this.GetComponentInChildren<MeshRenderer>().enabled = true;
         this.GetComponent<CharacterController>().enabled = true;
         this.GetComponent<Rigidbody>().isKinematic = false;
-        //this.GetComponent<Rigidbody>().velocity = Vector3.zero;
         health = 1;
 
     }
@@ -188,7 +181,7 @@ public class Player : NetworkBehaviour
     private void Update()
     {
         //if (Input.GetKeyDown(KeyCode.L))
-            //Die();
+            // Die();
 
         if (isDead)
             return;

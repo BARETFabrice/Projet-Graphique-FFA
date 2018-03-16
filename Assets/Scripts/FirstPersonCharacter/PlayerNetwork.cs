@@ -19,7 +19,8 @@ public class PlayerNetwork : NetworkBehaviour {
     void Start () {
         //if (isServer && isLocalPlayer)
         //    NetworkManagerFFA.instance.ServerChangeScene("Game");
-		CmdSpawnMyUnit();
+        if(isLocalPlayer)
+		    CmdSpawnMyUnit();
     }
 
 	[Command]
@@ -27,20 +28,9 @@ public class PlayerNetwork : NetworkBehaviour {
 	{
         playerUnit = Instantiate(playerH);
         player = playerUnit.GetComponent<Player>();
-        player.setPlayerNetwork(this);
-        Respawn();
+        player.Respawn();
         NetworkServer.SpawnWithClientAuthority (playerUnit, connectionToClient);
 	}
-
-    public void died()
-    {
-        Invoke("Respawn", 3f);
-    }
-
-    private void Respawn()
-    {
-        player.Respawn(new Vector3(0, 3, 0));
-    }
 
 	// Update is called once per frame
 	void Update () {

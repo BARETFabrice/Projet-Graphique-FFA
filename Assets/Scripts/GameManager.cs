@@ -49,17 +49,14 @@ public class GameManager : NetworkBehaviour {
 
     private void Awake()
     {
-        Debug.Log("GameManager Awake");
 
         instance = this;
     }
     // Use this for initialization
     void Start () {
-        Debug.Log("GameManager Start");
 
         if (isServer)
         {
-
             localTimeLeft = 600;
             InvokeRepeating("SyncVarTimeLeft", 0.1f, 10F);
         }
