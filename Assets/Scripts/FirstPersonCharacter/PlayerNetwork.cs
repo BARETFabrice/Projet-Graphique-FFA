@@ -6,21 +6,28 @@ using UnityEngine.SceneManagement;
 
 public class PlayerNetwork : NetworkBehaviour {
 
-	public GameObject playerH;
-	private GameObject playerUnit;
+    public GameObject playerH;
+    private GameObject playerUnit;
     private Player player;
 
-    private void Awake()
-    {
-        //DontDestroyOnLoad(this);
-    }
-
     // Use this for initialization
-    void Start () {
+    void Start() {
         //if (isServer && isLocalPlayer)
         //    NetworkManagerFFA.instance.ServerChangeScene("Game");
-        if(isLocalPlayer)
-		    CmdSpawnMyUnit();
+        if (isLocalPlayer)
+            CmdSpawnMyUnit();
+
+        EventsManager.AddListener(EventsManager.Events.gameEnded, destroyPhysicalPlayer);
+    }
+
+    private void OnDestroy()
+    {
+        EventsManager.RemoveListener(EventsManager.Events.gameEnded, destroyPhysicalPlayer);
+    }
+
+    void destroyPhysicalPlayer()
+    {
+        GameObject.Destroy(playerUnit);
     }
 
 	[Command]
@@ -30,10 +37,5 @@ public class PlayerNetwork : NetworkBehaviour {
         player = playerUnit.GetComponent<Player>();
         player.Respawn();
         NetworkServer.SpawnWithClientAuthority (playerUnit, connectionToClient);
-	}
-
-	// Update is called once per frame
-	void Update () {
-		
 	}
 }

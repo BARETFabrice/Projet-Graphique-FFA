@@ -11,6 +11,8 @@ public class GameManager : NetworkBehaviour {
     private float localTimeLeft = 0;
     private static GameManager instance=null;
 
+    public GameObject FinalCamera;
+
     private void OnSyncedTimeLeftChanged(float newValue)
     {
         syncedTimeLeft = newValue;
@@ -63,9 +65,18 @@ public class GameManager : NetworkBehaviour {
             localTimeLeft = syncedTimeLeft;
     }
 
-    void endGame()
+    void closeServer()
     {
 
+    }
+
+    void endGame()
+    {
+        FinalCamera.SetActive(true);
+        gameObject.GetComponent<InterfaceInputListener>().enabled=false;
+        EventsManager.TriggerEvent(EventsManager.Events.TabPressed);
+
+        Invoke("closeServer",6F);
 
         EventsManager.TriggerEvent(EventsManager.Events.gameEnded);
         RpcTriggerEndGame();
