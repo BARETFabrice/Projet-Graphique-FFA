@@ -39,9 +39,6 @@ public class Player : NetworkBehaviour
     private bool m_Jumping;
     private AudioSource m_AudioSource;
 
-    private int kills = 0;
-    private int deaths = 0;
-
     [SyncVar(hook = "healthChanged")]
     public int health = 1;
     [SyncVar]
@@ -49,6 +46,13 @@ public class Player : NetworkBehaviour
     private bool isDead = false;
 
     public GameObject laser;
+
+    public PlayerNetwork playerNetwork  = null;
+
+    public void setPlayerNetwork(PlayerNetwork p)
+    {
+        playerNetwork = p;
+    }
 
     // Use this for initialization
     private void Start()
@@ -81,8 +85,12 @@ public class Player : NetworkBehaviour
     [Command]
     private void CmdkillPlayer(int id)
     {
+        playerNetwork.CmdIncrementKills();
+
         Player player = PlayerStructure.getInstance().getPlayer(id);
         player.health = 0;
+
+        player.playerNetwork.CmdIncrementDeaths();
     }
 
     private void healthChanged(int newHp)
@@ -96,9 +104,9 @@ public class Player : NetworkBehaviour
 
     public void Die()
     {
-        deaths++;
-
         isDead = true;
+
+        EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
 
         this.GetComponentInChildren<MeshRenderer>().enabled = false;
         this.GetComponent<CharacterController>().enabled = false;
@@ -147,8 +155,6 @@ public class Player : NetworkBehaviour
         {
             Player p = (Player)hitInfo.collider.gameObject.GetComponent(typeof(Player));
             CmdkillPlayer(p.id);
-
-            kills++;
             return true;
         }
         return false;

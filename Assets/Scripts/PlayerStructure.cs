@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 public class PlayerStructure
 {
     private static PlayerStructure instance=null;
-    private List<Player> liste;
+    private Player[] liste;
 
     public static PlayerStructure getInstance()
     {
@@ -18,22 +18,31 @@ public class PlayerStructure
 
     private PlayerStructure()
     {
-        liste = new List<Player>();
+        liste = new Player[10];
+        
     }
 
     public int addPlayer(Player p)
     {
-        liste.Add(p);
+        int position = 0;
 
-        return liste.Count-1;
+        while (liste[position])
+        {
+            if (position < 9)
+                position++;
+            else
+                return -1;
+        }
+
+        liste[position] = p;
+
+        return position;
     }
 
     public Player getPlayer(int id)
     {
-        if (id < 0 || liste.Count < id)
+        if (id < 0 || liste.Length < id)
             return null;
-
-        Debug.Log("returned " + id);
 
         Player p = liste[id];
 

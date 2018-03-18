@@ -67,7 +67,9 @@ public class GameManager : NetworkBehaviour {
 
     void closeServer()
     {
-
+        NetworkManagerFFA.instance.ServerChangeScene("NetworkMenu");
+        Network.Disconnect(0);
+        NetworkManagerFFA.instance.StopHost();
     }
 
     void endGame()
