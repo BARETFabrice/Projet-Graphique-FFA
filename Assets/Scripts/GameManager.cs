@@ -67,9 +67,7 @@ public class GameManager : NetworkBehaviour {
 
     void closeServer()
     {
-        NetworkManagerFFA.instance.ServerChangeScene("NetworkMenu");
-        Network.Disconnect(0);
-        NetworkManagerFFA.instance.StopHost();
+        NetworkManagerFFA.instance.endGame();
     }
 
     void endGame()
@@ -92,6 +90,9 @@ public class GameManager : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (localTimeLeft < 0)
+            return;
+
         localTimeLeft -= Time.deltaTime;
 
         if (isServer && localTimeLeft < 0)

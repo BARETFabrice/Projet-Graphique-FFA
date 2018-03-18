@@ -21,6 +21,24 @@ public class NetworkManagerFFA : NetworkManager
         isServer = true;
     }
 
+    public void endGame()
+    {
+        if (!isServer)
+            return;
+
+        instance = null;
+        this.ServerChangeScene("MainMenu");
+        Network.Disconnect(0);
+        this.StopServer();
+        NetworkManagerFFA.Shutdown();
+    }
+
+    public void OnLevelWasLoaded(int level)
+    {
+        if (level == 0)
+            Destroy(gameObject);
+    }
+
     public override void OnServerConnect(NetworkConnection conn)
     {
         base.OnServerConnect(conn);
