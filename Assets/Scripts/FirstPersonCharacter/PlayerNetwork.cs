@@ -38,7 +38,8 @@ public class PlayerNetwork : NetworkBehaviour {
         //if (isServer && isLocalPlayer)
         //    NetworkManagerFFA.instance.ServerChangeScene("Game");
 
-
+        if (isServer)
+            PlayerStructure.newInstance();
 
         if (isLocalPlayer)
             CmdSpawnMyUnit();

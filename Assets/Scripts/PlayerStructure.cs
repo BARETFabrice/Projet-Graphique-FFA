@@ -11,7 +11,14 @@ public class PlayerStructure
     public static PlayerStructure getInstance()
     {
         if (instance == null)
-            instance = new PlayerStructure();
+            PlayerStructure.newInstance();
+
+        return instance;
+    }
+
+    public static PlayerStructure newInstance()
+    {
+        instance = new PlayerStructure();
 
         return instance;
     }

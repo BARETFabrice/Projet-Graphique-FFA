@@ -58,7 +58,7 @@ public class GameManager : NetworkBehaviour {
 
         if (isServer)
         {
-            localTimeLeft = 600;
+            localTimeLeft = 1;
             InvokeRepeating("SyncVarTimeLeft", 0.1f, 10F);
         }
         else
@@ -76,7 +76,7 @@ public class GameManager : NetworkBehaviour {
         gameObject.GetComponent<InterfaceInputListener>().enabled=false;
         EventsManager.TriggerEvent(EventsManager.Events.TabPressed);
 
-        Invoke("closeServer",6F);
+        Invoke("closeServer",1);
 
         EventsManager.TriggerEvent(EventsManager.Events.gameEnded);
         RpcTriggerEndGame();
