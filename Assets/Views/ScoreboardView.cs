@@ -15,6 +15,7 @@ public class ScoreboardView : MonoBehaviour {
     {
         canvasGroup = gameObject.GetComponent<CanvasGroup>();
 
+        EmptyScoreboard();
         UpdateScoreboard();
 
         // La vue écoute les différents événements qui ont un impacte sur cette dernière et agit en conséquence
@@ -24,6 +25,11 @@ public class ScoreboardView : MonoBehaviour {
     }
 
     private void UpdateScoreboard()
+    {
+        ScoreboardController.getRankings();
+    }
+
+    private void EmptyScoreboard()
     {
         if (names.Length != kills.Length || deaths.Length != kills.Length)
             return;

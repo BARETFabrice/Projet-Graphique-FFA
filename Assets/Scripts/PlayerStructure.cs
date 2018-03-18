@@ -25,8 +25,7 @@ public class PlayerStructure
 
     private PlayerStructure()
     {
-        liste = new Player[10];
-        
+        liste = new Player[10];   
     }
 
     public int addPlayer(Player p)
@@ -35,7 +34,7 @@ public class PlayerStructure
 
         while (liste[position])
         {
-            if (position < 9)
+            if (position < liste.Length-1)
                 position++;
             else
                 return -1;
@@ -48,7 +47,7 @@ public class PlayerStructure
 
     public Player getPlayer(int id)
     {
-        if (id < 0 || liste.Length < id)
+        if (id < 0 || liste.Length <= id)
             return null;
 
         Player p = liste[id];

@@ -49,11 +49,6 @@ public class Player : NetworkBehaviour
 
     public PlayerNetwork playerNetwork  = null;
 
-    public void setPlayerNetwork(PlayerNetwork p)
-    {
-        playerNetwork = p;
-    }
-
     // Use this for initialization
     private void Start()
     {
@@ -192,8 +187,8 @@ public class Player : NetworkBehaviour
     // Update is called once per frame
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.L))
-            // Die();
+        if (Input.GetKeyDown(KeyCode.L))
+           Die();
 
         if (isDead)
             return;

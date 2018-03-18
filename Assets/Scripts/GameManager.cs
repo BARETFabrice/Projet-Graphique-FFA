@@ -8,7 +8,7 @@ public class GameManager : NetworkBehaviour {
     [SyncVar(hook = "OnSyncedTimeLeftChanged")]
     private float syncedTimeLeft;
 
-    private float localTimeLeft = 0;
+    private float localTimeLeft;
     private static GameManager instance=null;
 
     public GameObject FinalCamera;
@@ -58,7 +58,7 @@ public class GameManager : NetworkBehaviour {
 
         if (isServer)
         {
-            localTimeLeft = 1;
+            localTimeLeft = 600;
             InvokeRepeating("SyncVarTimeLeft", 0.1f, 10F);
         }
         else
@@ -76,7 +76,7 @@ public class GameManager : NetworkBehaviour {
         gameObject.GetComponent<InterfaceInputListener>().enabled=false;
         EventsManager.TriggerEvent(EventsManager.Events.TabPressed);
 
-        Invoke("closeServer",1);
+        Invoke("closeServer",5);
 
         EventsManager.TriggerEvent(EventsManager.Events.gameEnded);
         RpcTriggerEndGame();

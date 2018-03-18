@@ -38,8 +38,7 @@ public class PlayerNetwork : NetworkBehaviour {
         //if (isServer && isLocalPlayer)
         //    NetworkManagerFFA.instance.ServerChangeScene("Game");
 
-        if (isServer)
-            PlayerStructure.newInstance();
+
 
         if (isLocalPlayer)
             CmdSpawnMyUnit();
@@ -66,7 +65,7 @@ public class PlayerNetwork : NetworkBehaviour {
         playerUnit = Instantiate(playerH);
         player = playerUnit.GetComponent<Player>();
         player.Respawn();
-        player.setPlayerNetwork(this);
+        player.playerNetwork=this;
         NetworkServer.SpawnWithClientAuthority (playerUnit, connectionToClient);
 	}
 }
