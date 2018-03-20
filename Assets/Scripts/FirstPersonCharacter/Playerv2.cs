@@ -174,11 +174,15 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 <<<<<<< HEAD:Assets/Scripts/FirstPersonCharacter/Player.cs
                 Debug.Log("touché");
 
+<<<<<<< HEAD:Assets/Scripts/FirstPersonCharacter/Playerv2.cs
 <<<<<<< HEAD:Assets/Scripts/FirstPersonCharacter/Player.cs
                 Player p = (Player)hitInfo.collider.gameObject.GetComponent(typeof(Player));
 =======
                 Playerv2 p = (Playerv2)hitInfo.collider.gameObject.GetComponent(typeof(Playerv2));
 >>>>>>> parent of a2ab176... update:Assets/Scripts/FirstPersonCharacter/Playerv2.cs
+=======
+                Playerv2 p = (Playerv2)hitInfo.collider.gameObject.GetComponent(typeof(Playerv2));
+>>>>>>> parent of e192b61... up:Assets/Scripts/FirstPersonCharacter/Playerv2.cs
 =======
                 Playerv2 p = (Playerv2)hitInfo.collider.gameObject.GetComponent(typeof(Playerv2));
 >>>>>>> parent of e192b61... up:Assets/Scripts/FirstPersonCharacter/Playerv2.cs
