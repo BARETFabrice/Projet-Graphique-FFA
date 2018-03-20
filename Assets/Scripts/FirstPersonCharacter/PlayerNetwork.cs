@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 public class PlayerNetwork : NetworkBehaviour {
 
     public GameObject playerH;
     private GameObject playerUnit;
-    private Player player;
+    private Playerv2 player;
 
     // Use this for initialization
     void Start() {
@@ -32,7 +33,7 @@ public class PlayerNetwork : NetworkBehaviour {
 	void CmdSpawnMyUnit()
 	{
         playerUnit = Instantiate(playerH);
-        player = playerUnit.GetComponent<Player>();
+        player = playerUnit.GetComponent<Playerv2>();
         player.Respawn();
         NetworkServer.SpawnWithClientAuthority (playerUnit, connectionToClient);
 	}

@@ -16,7 +16,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         [SyncVar(hook = "healthChanged")]
         public int health = 1;
-        [SyncVar]
+        [SyncVar(hook = "addToPlayerStructure")]
         public int id;
         private bool isDead = false;
 
@@ -24,8 +24,23 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         public GameObject laser;
         public PlayerNetwork playerNetwork = null;
 
+        private void addToPlayerStructure(int i)
+        {
+            id = i;
+            PlayerStructure.getInstance().addPlayerAtId(i, this);
+        }
+
         private void Start()
         {
+            if (isServer)
+            {
+                id = PlayerStructure.getInstance().addPlayer(this);
+                playerName = "Player " + (id + 1);
+            }
+            else if (!hasAuthority)
+                addToPlayerStructure(id);
+
+            m_Camera = this.gameObject.GetComponentInChildren<Camera>();
             // get the third person character ( this should never be null due to require component )
             m_Character = GetComponent<ThirdPersonCharacter>();
         }
@@ -33,6 +48,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         public override void OnStartAuthority()
         {
             m_Camera = this.gameObject.GetComponentInChildren<Camera>();
+            m_Character = GetComponent<ThirdPersonCharacter>();
             m_Camera.enabled = true;
             m_Cam = m_Camera.transform;
         }
@@ -42,7 +58,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         {
             //playerNetwork.CmdIncrementKills();
 
-            Player player = PlayerStructure.getInstance().getPlayer(id);
+            Playerv2 player = PlayerStructure.getInstance().getPlayer(id);
             player.health = 0;
 
             //player.playerNetwork.CmdIncrementDeaths();
@@ -57,6 +73,50 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             }
         }
 
+        public string getName()
+        {
+            return playerName;
+        }
+
+        [SyncVar]
+        private string playerName;
+        [SyncVar(hook = "updateKills")]
+        private int kills = 0;
+        [SyncVar(hook = "updateDeaths")]
+        private int deaths = 0;
+
+        private void updateKills(int k)
+        {
+            kills = k;
+            EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
+        }
+
+        private void updateDeaths(int d)
+        {
+            deaths = d;
+            EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
+        }
+
+        [Command]
+        public void CmdIncrementKills()
+        {
+            kills++;
+            EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
+        }
+
+        [Command]
+        public void CmdIncrementDeaths()
+        {
+            deaths++;
+            EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
+        }
+
+        public int getKills()
+        { return kills; }
+
+        public int getDeaths()
+        { return deaths; }
+
         public void Die()
         {
             isDead = true;
@@ -65,6 +125,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
             //this.GetComponentInChildren<MeshRenderer>().enabled = false;
             //this.GetComponent<CharacterController>().enabled = false;
+            this.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+
             this.GetComponent<Rigidbody>().isKinematic = true;
 
             Invoke("Respawn", 3f);
@@ -87,6 +149,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
             //this.GetComponentInChildren<MeshRenderer>().enabled = true;
             //this.GetComponent<CharacterController>().enabled = true;
+            this.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
             this.GetComponent<Rigidbody>().isKinematic = false;
             health = 1;
 
@@ -108,7 +171,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
             if (hitInfo.collider && hitInfo.collider.tag == "Player")
             {
-                Player p = (Player)hitInfo.collider.gameObject.GetComponent(typeof(Player));
+                Playerv2 p = (Playerv2)hitInfo.collider.gameObject.GetComponent(typeof(Playerv2));
                 CmdkillPlayer(p.id);
                 return true;
             }

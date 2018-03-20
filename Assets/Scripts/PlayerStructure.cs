@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 public class PlayerStructure
 {
     private static PlayerStructure instance=null;
-    private Player[] liste;
+    private Playerv2[] liste;
 
     public static PlayerStructure getInstance()
     {
@@ -23,14 +24,14 @@ public class PlayerStructure
         return instance;
     }
 
-    public Player[] getListe()
+    public Playerv2[] getListe()
     {
         return liste;
     }
 
     private PlayerStructure()
     {
-        liste = new Player[10];
+        liste = new Playerv2[10];
 
         for(int i=0; i<10; i++)
         {
@@ -38,7 +39,7 @@ public class PlayerStructure
         }
     }
 
-    public int addPlayer(Player p)
+    public int addPlayer(Playerv2 p)
     {
         int position = 0;
 
@@ -55,17 +56,17 @@ public class PlayerStructure
         return position;
     }
 
-    public void addPlayerAtId(int id, Player p)
+    public void addPlayerAtId(int id, Playerv2 p)
     {
         liste[id] = p;
     }
 
-    public Player getPlayer(int id)
+    public Playerv2 getPlayer(int id)
     {
         if (id < 0 || liste.Length <= id)
             return null;
 
-        Player p = liste[id];
+        Playerv2 p = liste[id];
 
         return p;
     }

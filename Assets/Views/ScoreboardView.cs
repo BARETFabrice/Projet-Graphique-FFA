@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 public class ScoreboardView : MonoBehaviour {
 
@@ -25,11 +26,11 @@ public class ScoreboardView : MonoBehaviour {
 
     private void UpdateScoreboard()
     {
-        Player[] rankings = ScoreboardController.getRankings();
+        Playerv2[] rankings = ScoreboardController.getRankings();
 
         for (var i = 0; i < 10; i++)
         {
-            Player p = rankings[i];
+            Playerv2 p = rankings[i];
 
             if (p == null)
             {

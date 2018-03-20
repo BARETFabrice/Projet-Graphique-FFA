@@ -1,12 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityStandardAssets.CrossPlatformInput;
 
 namespace UnityStandardAssets.Characters.FirstPerson
 {
     [RequireComponent(typeof (Rigidbody))]
     [RequireComponent(typeof (CapsuleCollider))]
-    public class RigidbodyFirstPersonController : MonoBehaviour
+    public class RigidbodyFirstPersonController : NetworkBehaviour
     {
         [Serializable]
         public class MovementSettings
@@ -77,7 +78,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         }
 
 
-        public Camera cam;
+        private Camera cam;
         public MovementSettings movementSettings = new MovementSettings();
         public MouseLook mouseLook = new MouseLook();
         public AdvancedSettings advancedSettings = new AdvancedSettings();
@@ -120,14 +121,29 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void Start()
         {
+            cam = this.gameObject.GetComponentInChildren<Camera>();
             m_RigidBody = GetComponent<Rigidbody>();
             m_Capsule = GetComponent<CapsuleCollider>();
-            mouseLook.Init (transform, cam.transform);
+            
+        }
+
+        public override void OnStartAuthority()
+        {
+            m_RigidBody = GetComponent<Rigidbody>();
+            m_Capsule = GetComponent<CapsuleCollider>();
+            cam = this.gameObject.GetComponentInChildren<Camera>();
+            cam.enabled = true;
+            mouseLook.Init(transform, cam.transform);
         }
 
 
         private void Update()
         {
+            if (!hasAuthority)
+            {
+                return;
+            }
+
             RotateView();
         }
 

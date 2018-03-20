@@ -1,12 +1,13 @@
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
 	[RequireComponent(typeof(Rigidbody))]
 	[RequireComponent(typeof(CapsuleCollider))]
 	[RequireComponent(typeof(Animator))]
-	public class ThirdPersonCharacter : MonoBehaviour
-	{
+	public class ThirdPersonCharacter : NetworkBehaviour
+    {
 		[SerializeField] float m_MovingTurnSpeed = 360;
 		[SerializeField] float m_StationaryTurnSpeed = 180;
 		[SerializeField] float m_JumpPower = 12f;
@@ -43,13 +44,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		}
 
 
+
+
 		public void Move(Vector3 move, bool crouch, bool jump)
 		{
-
-			// convert the world relative moveInput vector into a local-relative
-			// turn amount and forward amount required to head in the desired
-			// direction.
-			if (move.magnitude > 1f) move.Normalize();
+            // convert the world relative moveInput vector into a local-relative
+            // turn amount and forward amount required to head in the desired
+            // direction.
+            if (move.magnitude > 1f) move.Normalize();
 			move = transform.InverseTransformDirection(move);
 			CheckGroundStatus();
 			move = Vector3.ProjectOnPlane(move, m_GroundNormal);
