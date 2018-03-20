@@ -76,7 +76,6 @@ public class Player : NetworkBehaviour, IComparable
         m_StepCycle = 0f;
         m_NextStep = m_StepCycle / 2f;
         m_Jumping = false;
-        
         m_MouseLook.Init(transform, m_Camera.transform);
 
         EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
@@ -175,6 +174,7 @@ public class Player : NetworkBehaviour, IComparable
     public void Respawn()
     {
         isDead = false;
+        GetComponent<AudioSource>().Play();
 
         if (hasAuthority)
         {
