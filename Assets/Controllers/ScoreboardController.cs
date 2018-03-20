@@ -5,10 +5,10 @@ using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
 
 public static class ScoreboardController {
-    public static Player[] getRankings()
+    public static Playerv2[] getRankings()
     {
         PlayerStructure structure = PlayerStructure.getInstance();
-        Player[] liste = (Player[])structure.getListe().Clone();
+        Playerv2[] liste = (Playerv2[])structure.getListe().Clone();
 
         Array.Sort(liste);
 
