@@ -47,8 +47,6 @@ public class Player : NetworkBehaviour, IComparable
 
     public GameObject laser;
 
-    public PlayerNetwork playerNetwork  = null;
-
     private void addToPlayerStructure(int i)
     {
         id = i;
@@ -62,6 +60,7 @@ public class Player : NetworkBehaviour, IComparable
         if (isServer)
         {
             id = PlayerStructure.getInstance().addPlayer(this);
+            playerName = "Player " + (id + 1);
         }
         else if (!hasAuthority)
             addToPlayerStructure(id);
@@ -76,6 +75,8 @@ public class Player : NetworkBehaviour, IComparable
         m_Jumping = false;
         m_AudioSource = GetComponent<AudioSource>();
         m_MouseLook.Init(transform, m_Camera.transform);
+
+        EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
     }
 
 
@@ -103,6 +104,13 @@ public class Player : NetworkBehaviour, IComparable
         }
     }
 
+    public string getName()
+    {
+        return playerName;
+    }
+
+    [SyncVar]
+    private string playerName;
     [SyncVar(hook = "updateKills")]
     private int kills = 0;
     [SyncVar(hook = "updateDeaths")]

@@ -58,7 +58,7 @@ public class GameManager : NetworkBehaviour {
 
         if (isServer)
         {
-            localTimeLeft = 600;
+            localTimeLeft = 2;
             InvokeRepeating("SyncVarTimeLeft", 0.1f, 10F);
         }
         else
@@ -72,6 +72,7 @@ public class GameManager : NetworkBehaviour {
 
     void endGame()
     {
+        EventsManager.TriggerEvent(EventsManager.Events.respawned);
         FinalCamera.SetActive(true);
         gameObject.GetComponent<InterfaceInputListener>().enabled=false;
         EventsManager.TriggerEvent(EventsManager.Events.TabPressed);
