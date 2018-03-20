@@ -37,7 +37,6 @@ public class Player : NetworkBehaviour, IComparable
     private float m_StepCycle;
     private float m_NextStep;
     private bool m_Jumping;
-    private AudioSource m_AudioSource;
 
     private AudioListener audioListener;
 
@@ -77,7 +76,7 @@ public class Player : NetworkBehaviour, IComparable
         m_StepCycle = 0f;
         m_NextStep = m_StepCycle / 2f;
         m_Jumping = false;
-        m_AudioSource = GetComponentInChildren<AudioSource>();
+        
         m_MouseLook.Init(transform, m_Camera.transform);
 
         EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
@@ -206,7 +205,6 @@ public class Player : NetworkBehaviour, IComparable
 
         CmddrawLaser(ray.origin, hitInfo.point);
         drawLaser(ray.origin, hitInfo.point);
-        m_AudioSource.Play();
 
         if (hitInfo.collider && hitInfo.collider.tag == "Player")
         {
@@ -230,7 +228,6 @@ public class Player : NetworkBehaviour, IComparable
             return;
 
         drawLaser(start, end);
-        m_AudioSource.Play();
     }
 
     void drawLaser(Vector3 start, Vector3 end)
@@ -243,7 +240,7 @@ public class Player : NetworkBehaviour, IComparable
         lr.SetPosition(0, start);
         lr.SetPosition(1, end);
 
-        //NetworkServer.Spawn(myLine);
+        myLine.GetComponent<AudioSource>().Play();
 
         GameObject.Destroy(myLine, duration);
     }
