@@ -167,14 +167,17 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
             CmddrawLaser(ray.origin, hitInfo.point);
             drawLaser(ray.origin, hitInfo.point);
-            Debug.Log("tir: " + hitInfo.collider.tag);
 
 
             if (hitInfo.collider && hitInfo.collider.tag == "Player")
             {
+<<<<<<< HEAD:Assets/Scripts/FirstPersonCharacter/Player.cs
                 Debug.Log("touché");
 
                 Player p = (Player)hitInfo.collider.gameObject.GetComponent(typeof(Player));
+=======
+                Playerv2 p = (Playerv2)hitInfo.collider.gameObject.GetComponent(typeof(Playerv2));
+>>>>>>> parent of a2ab176... update:Assets/Scripts/FirstPersonCharacter/Playerv2.cs
                 CmdkillPlayer(p.id);
                 return true;
             }
