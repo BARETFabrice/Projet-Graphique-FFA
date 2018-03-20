@@ -18,6 +18,9 @@ public class NetworkManagerFFA : NetworkManager
     {
         base.OnStartServer();
 
+
+        PlayerStructure.newInstance();
+
         isServer = true;
     }
 

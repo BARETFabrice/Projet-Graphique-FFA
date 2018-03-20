@@ -40,16 +40,13 @@ public class ScoreboardView : MonoBehaviour {
             int position = 9 - i;
 
             names[position].text = "Player " + i;
-            //kills[position].text = ""+p.getKills();
-            //deaths[position].text = "" + p.getKills();
+            kills[position].text = ""+p.getKills();
+            deaths[position].text = "" + p.getDeaths();
         }
     }
 
     private void EmptyScoreboard()
     {
-        if (names.Length != kills.Length || deaths.Length != kills.Length)
-            return;
-
         for (int i = 0; i < names.Length; i++)
         {
             names[i].text = "";

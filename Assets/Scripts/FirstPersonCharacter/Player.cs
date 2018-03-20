@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 [RequireComponent(typeof(CharacterController))]
 
-public class Player : NetworkBehaviour
+public class Player : NetworkBehaviour, IComparable
 {
     [SerializeField] private bool m_IsWalking;
     [SerializeField] private float m_WalkSpeed;
@@ -56,7 +56,7 @@ public class Player : NetworkBehaviour
         if (isServer)
         {
             id=PlayerStructure.getInstance().addPlayer(this);
-        }			
+        }		
 
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = this.gameObject.GetComponentInChildren<Camera>();
@@ -80,12 +80,12 @@ public class Player : NetworkBehaviour
     [Command]
     private void CmdkillPlayer(int id)
     {
-        //playerNetwork.CmdIncrementKills();
+        Debug.Log("try to kill" + id);
+
+        CmdIncrementKills();
 
         Player player = PlayerStructure.getInstance().getPlayer(id);
         player.health = 0;
-
-        //player.playerNetwork.CmdIncrementDeaths();
     }
 
     private void healthChanged(int newHp)
@@ -97,9 +97,38 @@ public class Player : NetworkBehaviour
         }
     }
 
+    [SyncVar]
+    private int kills = 0;
+    [SyncVar]
+    private int deaths = 0;
+
+    [Command]
+    public void CmdIncrementKills()
+    {
+        kills++;
+    }
+
+    [Command]
+    public void CmdIncrementDeaths()
+    {
+        deaths++;
+    }
+
+    public int getKills()
+    { return kills; }
+
+    public int getDeaths()
+    { return deaths; }
+
     public void Die()
     {
         isDead = true;
+
+        if (hasAuthority)
+        {
+            CmdIncrementDeaths();
+            EventsManager.TriggerEvent(EventsManager.Events.died);
+        }
 
         EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
 
@@ -109,8 +138,7 @@ public class Player : NetworkBehaviour
 
         Invoke("Respawn", 3f);
 
-        if (hasAuthority)
-            EventsManager.TriggerEvent(EventsManager.Events.died);
+        
     }
 
     public void Respawn()
@@ -371,5 +399,21 @@ public class Player : NetworkBehaviour
             return;
         }
         body.AddForceAtPosition(m_CharacterController.velocity * 0.1f, hit.point, ForceMode.Impulse);
+    }
+
+    public int CompareTo(object obj)
+    {
+        if (obj == null) return 1;
+
+        Player otherPlayer = obj as Player;
+        if (otherPlayer == null)
+            throw new ArgumentException("Object is not a Player");
+
+        int result = this.kills.CompareTo(otherPlayer.kills);
+
+        if (result == 0)
+            result = otherPlayer.deaths.CompareTo(this.deaths);
+
+        return result;
     }
 }

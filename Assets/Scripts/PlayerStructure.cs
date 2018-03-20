@@ -30,7 +30,12 @@ public class PlayerStructure
 
     private PlayerStructure()
     {
-        liste = new Player[10];   
+        liste = new Player[10];
+
+        for(int i=0; i<10; i++)
+        {
+            liste[i] = null;
+        }
     }
 
     public int addPlayer(Player p)
@@ -50,10 +55,10 @@ public class PlayerStructure
         return position;
     }
 
-    public void addPlayerAtId(int id, Player p)
+    /*public void addPlayerAtId(int id, Player p)
     {
         liste[id] = p;
-    }
+    }*/
 
     public Player getPlayer(int id)
     {
