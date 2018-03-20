@@ -167,10 +167,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
             CmddrawLaser(ray.origin, hitInfo.point);
             drawLaser(ray.origin, hitInfo.point);
+            Debug.Log("tir: " + hitInfo.collider.tag);
 
 
             if (hitInfo.collider && hitInfo.collider.tag == "Player")
             {
+                Debug.Log("touché");
+
                 Playerv2 p = (Playerv2)hitInfo.collider.gameObject.GetComponent(typeof(Playerv2));
                 CmdkillPlayer(p.id);
                 return true;
