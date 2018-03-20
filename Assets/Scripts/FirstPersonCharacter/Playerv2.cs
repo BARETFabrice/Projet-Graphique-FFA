@@ -76,8 +76,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
             EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
 
-            this.GetComponentInChildren<MeshRenderer>().enabled = false;
-            this.GetComponent<CharacterController>().enabled = false;
+            //this.GetComponentInChildren<MeshRenderer>().enabled = false;
+            //this.GetComponent<CharacterController>().enabled = false;
             this.GetComponent<Rigidbody>().isKinematic = true;
 
             Invoke("Respawn", 3f);
@@ -98,8 +98,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 EventsManager.TriggerEvent(EventsManager.Events.respawned);
             }
 
-            this.GetComponentInChildren<MeshRenderer>().enabled = true;
-            this.GetComponent<CharacterController>().enabled = true;
+            //this.GetComponentInChildren<MeshRenderer>().enabled = true;
+            //this.GetComponent<CharacterController>().enabled = true;
             this.GetComponent<Rigidbody>().isKinematic = false;
             health = 1;
 
