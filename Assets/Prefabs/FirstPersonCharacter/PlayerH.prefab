@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33204511309572544}
   - component: {fileID: 23559296816421884}
   - component: {fileID: 20368924096432516}
+  - component: {fileID: 81413133026001336}
   m_Layer: 0
   m_Name: FirstPersonCharacter
   m_TagString: MainCamera
@@ -168,6 +169,13 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!81 &81413133026001336
+AudioListener:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1129089687760246}
+  m_Enabled: 0
 --- !u!114 &114390060411743124
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -282,7 +290,6 @@ MonoBehaviour:
   health: 1
   id: 0
   laser: {fileID: 1226001362565576, guid: fceae234a18410144837ee5780dffbca, type: 2}
-  playerNetwork: {fileID: 0}
 --- !u!114 &114548696981152692
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -39,6 +39,10 @@ public class Player : NetworkBehaviour, IComparable
     private bool m_Jumping;
     private AudioSource m_AudioSource;
 
+    private AudioListener audioListener;
+
+    float shotCooldown = 0;
+
     [SyncVar(hook = "healthChanged")]
     public int health = 1;
     [SyncVar(hook = "addToPlayerStructure")]
@@ -84,7 +88,9 @@ public class Player : NetworkBehaviour, IComparable
 	{
         m_Camera = this.gameObject.GetComponentInChildren<Camera>();
         m_Camera.enabled = true;
-	}
+        audioListener = this.gameObject.GetComponentInChildren<AudioListener>();
+        audioListener.enabled = true;
+    }
 
     [Command]
     private void CmdkillPlayer(int id)
@@ -184,11 +190,12 @@ public class Player : NetworkBehaviour, IComparable
         this.GetComponent<CharacterController>().enabled = true;
         this.GetComponent<Rigidbody>().isKinematic = false;
         health = 1;
-
+        shotCooldown = 0;
     }
 
     bool shoot()
     {
+        shotCooldown = 1;
         RaycastHit hitInfo;
         Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
 
@@ -253,7 +260,15 @@ public class Player : NetworkBehaviour, IComparable
 			return;
         }
 
+        if (shotCooldown > 0)
+            shotCooldown -= Time.deltaTime;
+
         RotateView();
+
+        if (Input.GetMouseButtonDown(0) && !isDead && shotCooldown <= 0)
+        {
+            shoot();
+        }
 
         // the jump state needs to read here to make sure it is not missed
         if (!m_Jump)
@@ -295,11 +310,6 @@ public class Player : NetworkBehaviour, IComparable
 
         m_MoveDir.x = desiredMove.x * speed;
         m_MoveDir.z = desiredMove.z * speed;
-
-        if (Input.GetMouseButtonDown(0) && !isDead)
-        {
-            shoot(/*gameObject.transform.TransformVector(Vector3.zero), new Vector3(yaw / 90, -pitch / 90,0)*/);
-        }
 
 
         if (m_CharacterController.isGrounded)
