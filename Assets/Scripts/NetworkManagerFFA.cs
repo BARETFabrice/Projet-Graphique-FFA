@@ -25,19 +25,20 @@ public class NetworkManagerFFA : NetworkManager
     {
         if (!isServer)
             return;
-
+        
         instance = null;
+
+        for (int i = Network.connections.Length-1 ; i > 1; i--)
+        {
+            Network.CloseConnection(Network.connections[i], false);
+        }
         Network.Disconnect(0);
+        this.StopMatchMaker();
+        this.StopAllCoroutines();
+        GameObject.Destroy(gameObject, 0);
         this.StopServer();
-        NetworkManagerFFA.Shutdown();
-    }
+        this.StopHost();
 
-    public override void OnStopServer()
-    {
-        base.OnStopServer();
-
-
-        GameObject.Destroy(gameObject);
     }
 
     public override void OnServerConnect(NetworkConnection conn)
