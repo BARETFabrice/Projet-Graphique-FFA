@@ -40,8 +40,8 @@ public class ScoreboardView : MonoBehaviour {
             int position = 9 - i;
 
             names[position].text = "Player " + i;
-            kills[position].text = ""+p.getKills();
-            deaths[position].text = "" + p.getKills();
+            //kills[position].text = ""+p.getKills();
+            //deaths[position].text = "" + p.getKills();
         }
     }
 

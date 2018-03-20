@@ -80,12 +80,12 @@ public class Player : NetworkBehaviour
     [Command]
     private void CmdkillPlayer(int id)
     {
-        playerNetwork.CmdIncrementKills();
+        //playerNetwork.CmdIncrementKills();
 
         Player player = PlayerStructure.getInstance().getPlayer(id);
         player.health = 0;
 
-        player.playerNetwork.CmdIncrementDeaths();
+        //player.playerNetwork.CmdIncrementDeaths();
     }
 
     private void healthChanged(int newHp)
