@@ -9,7 +9,7 @@ public class PlayerNetwork : NetworkBehaviour {
 
     public GameObject playerH;
     private GameObject playerUnit;
-    private Playerv2 player;
+    private Player player;
 
     // Use this for initialization
     void Start() {
@@ -33,7 +33,7 @@ public class PlayerNetwork : NetworkBehaviour {
 	void CmdSpawnMyUnit()
 	{
         playerUnit = Instantiate(playerH);
-        player = playerUnit.GetComponent<Playerv2>();
+        player = playerUnit.GetComponent<Player>();
         player.Respawn();
         NetworkServer.SpawnWithClientAuthority (playerUnit, connectionToClient);
 	}

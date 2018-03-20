@@ -6,7 +6,7 @@ using UnityStandardAssets.CrossPlatformInput;
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
     [RequireComponent(typeof (ThirdPersonCharacter))]
-    public class Playerv2 : NetworkBehaviour
+    public class Player : NetworkBehaviour
     {
         private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
         private Transform m_Cam;                  // A reference to the main camera in the scenes transform
@@ -58,7 +58,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         {
             //playerNetwork.CmdIncrementKills();
 
-            Playerv2 player = PlayerStructure.getInstance().getPlayer(id);
+            Player player = PlayerStructure.getInstance().getPlayer(id);
             player.health = 0;
 
             //player.playerNetwork.CmdIncrementDeaths();
@@ -174,7 +174,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             {
                 Debug.Log("touché");
 
-                Playerv2 p = (Playerv2)hitInfo.collider.gameObject.GetComponent(typeof(Playerv2));
+                Player p = (Player)hitInfo.collider.gameObject.GetComponent(typeof(Player));
                 CmdkillPlayer(p.id);
                 return true;
             }

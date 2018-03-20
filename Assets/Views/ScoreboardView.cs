@@ -26,11 +26,11 @@ public class ScoreboardView : MonoBehaviour {
 
     private void UpdateScoreboard()
     {
-        Playerv2[] rankings = ScoreboardController.getRankings();
+        Player[] rankings = ScoreboardController.getRankings();
 
         for (var i = 0; i < 10; i++)
         {
-            Playerv2 p = rankings[i];
+            Player p = rankings[i];
 
             if (p == null)
             {
