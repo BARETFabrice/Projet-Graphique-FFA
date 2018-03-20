@@ -165,8 +165,9 @@ public class Player : NetworkBehaviour, IComparable
 
         if (hasAuthority)
         {
-            Vector3 position = new Vector3(0, 3, 0);
-            this.transform.position = position;
+			GameObject[] respawns = GameObject.FindGameObjectsWithTag("Respawn");
+			Vector3 position = new Vector3(0, 3, 0);
+			this.transform.position = respawns[Random.Range(0,respawns.Length - 1)].transform.position;
             this.transform.rotation = Quaternion.Euler(0, 0, 0);
             EventsManager.TriggerEvent(EventsManager.Events.respawned);
         }
