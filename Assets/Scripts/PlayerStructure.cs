@@ -55,10 +55,10 @@ public class PlayerStructure
         return position;
     }
 
-    /*public void addPlayerAtId(int id, Player p)
+    public void addPlayerAtId(int id, Player p)
     {
         liste[id] = p;
-    }*/
+    }
 
     public Player getPlayer(int id)
     {

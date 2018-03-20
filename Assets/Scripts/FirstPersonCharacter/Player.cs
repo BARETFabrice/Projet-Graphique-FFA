@@ -41,7 +41,7 @@ public class Player : NetworkBehaviour, IComparable
 
     [SyncVar(hook = "healthChanged")]
     public int health = 1;
-    [SyncVar]
+    [SyncVar(hook = "addToPlayerStructure")]
     public int id;
     private bool isDead = false;
 
@@ -49,14 +49,22 @@ public class Player : NetworkBehaviour, IComparable
 
     public PlayerNetwork playerNetwork  = null;
 
+    private void addToPlayerStructure(int i)
+    {
+        id = i;
+        PlayerStructure.getInstance().addPlayerAtId(i, this);
+    }
+
     // Use this for initialization
     private void Start()
     {
 
         if (isServer)
         {
-            id=PlayerStructure.getInstance().addPlayer(this);
-        }		
+            id = PlayerStructure.getInstance().addPlayer(this);
+        }
+        else if (!hasAuthority)
+            addToPlayerStructure(id);
 
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = this.gameObject.GetComponentInChildren<Camera>();
@@ -80,8 +88,6 @@ public class Player : NetworkBehaviour, IComparable
     [Command]
     private void CmdkillPlayer(int id)
     {
-        Debug.Log("try to kill" + id);
-
         CmdIncrementKills();
 
         Player player = PlayerStructure.getInstance().getPlayer(id);
@@ -97,21 +103,35 @@ public class Player : NetworkBehaviour, IComparable
         }
     }
 
-    [SyncVar]
+    [SyncVar(hook = "updateKills")]
     private int kills = 0;
-    [SyncVar]
+    [SyncVar(hook = "updateDeaths")]
     private int deaths = 0;
+
+    private void updateKills(int k)
+    {
+        kills = k;
+        EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
+    }
+
+    private void updateDeaths(int d)
+    {
+        deaths = d;
+        EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
+    }
 
     [Command]
     public void CmdIncrementKills()
     {
         kills++;
+        EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
     }
 
     [Command]
     public void CmdIncrementDeaths()
     {
         deaths++;
+        EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
     }
 
     public int getKills()
@@ -129,8 +149,6 @@ public class Player : NetworkBehaviour, IComparable
             CmdIncrementDeaths();
             EventsManager.TriggerEvent(EventsManager.Events.died);
         }
-
-        EventsManager.TriggerEvent(EventsManager.Events.somebodyDied);
 
         this.GetComponentInChildren<MeshRenderer>().enabled = false;
         this.GetComponent<CharacterController>().enabled = false;

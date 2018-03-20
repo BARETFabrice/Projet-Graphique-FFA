@@ -33,7 +33,6 @@ public class ScoreboardView : MonoBehaviour {
 
             if (p == null)
             {
-                Debug.Log("" + i + " = null");
                 continue;
             }
 
