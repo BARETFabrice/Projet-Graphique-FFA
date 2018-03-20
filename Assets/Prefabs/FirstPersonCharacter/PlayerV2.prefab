@@ -314,7 +314,7 @@ GameObject:
   - component: {fileID: 114526691730447276}
   - component: {fileID: 114853106059913982}
   m_Layer: 0
-  m_Name: ThirdPersonController
+  m_Name: PlayerV2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2724,6 +2724,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 521b611700410be45810047f0a74e899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 1
+  id: 0
+  laser: {fileID: 1226001362565576, guid: fceae234a18410144837ee5780dffbca, type: 2}
+  playerNetwork: {fileID: 0}
 --- !u!114 &114853106059913982
 MonoBehaviour:
   m_ObjectHideFlags: 1
