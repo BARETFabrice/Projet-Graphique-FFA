@@ -58,7 +58,7 @@ public class GameManager : NetworkBehaviour {
 
         if (isServer)
         {
-            localTimeLeft = 2;
+            localTimeLeft = 600;
             InvokeRepeating("SyncVarTimeLeft", 0.1f, 10F);
         }
         else
