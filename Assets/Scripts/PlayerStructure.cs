@@ -23,6 +23,11 @@ public class PlayerStructure
         return instance;
     }
 
+    public Player[] getListe()
+    {
+        return liste;
+    }
+
     private PlayerStructure()
     {
         liste = new Player[10];   
@@ -43,6 +48,11 @@ public class PlayerStructure
         liste[position] = p;
 
         return position;
+    }
+
+    public void addPlayerAtId(int id, Player p)
+    {
+        liste[id] = p;
     }
 
     public Player getPlayer(int id)

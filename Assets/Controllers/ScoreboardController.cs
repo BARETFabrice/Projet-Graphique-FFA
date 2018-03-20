@@ -1,26 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public static class ScoreboardController {
-    public static PlayerNetwork[] getRankings()
+    public static Player[] getRankings()
     {
-        PlayerNetwork[] rankings = new PlayerNetwork[10];
+        PlayerStructure structure = PlayerStructure.getInstance();
+        Player[] liste = structure.getListe();
 
-        for (int i = 0; i < 10; i++)
-        {
-            Player player = PlayerStructure.getInstance().getPlayer(i);
+        Array.Sort(liste);
 
-            if (player == null)
-                continue;
-
-            //int kills = player.CmdGetKills();
-            //int deaths = player.CmdGetDeaths();
-            //string name = "" + i;
-
-            //Debug.Log(name + " " + kills + " " + deaths);
-        }
-
-        return rankings;
+        return liste;
     }
 }

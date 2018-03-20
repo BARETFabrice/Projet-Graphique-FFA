@@ -16,7 +16,6 @@ public class ScoreboardView : MonoBehaviour {
         canvasGroup = gameObject.GetComponent<CanvasGroup>();
 
         EmptyScoreboard();
-        UpdateScoreboard();
 
         // La vue écoute les différents événements qui ont un impacte sur cette dernière et agit en conséquence
         EventsManager.AddListener(EventsManager.Events.TabPressed, OnOpenScoreboard);
@@ -26,7 +25,24 @@ public class ScoreboardView : MonoBehaviour {
 
     private void UpdateScoreboard()
     {
-        ScoreboardController.getRankings();
+        Player[] rankings = ScoreboardController.getRankings();
+
+        for (var i = 0; i < 10; i++)
+        {
+            Player p = rankings[i];
+
+            if (p == null)
+            {
+                Debug.Log("" + i + " = null");
+                continue;
+            }
+
+            int position = 9 - i;
+
+            names[position].text = "Player " + i;
+            kills[position].text = ""+p.getKills();
+            deaths[position].text = "" + p.getKills();
+        }
     }
 
     private void EmptyScoreboard()

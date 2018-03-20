@@ -10,36 +10,8 @@ public class PlayerNetwork : NetworkBehaviour {
     private GameObject playerUnit;
     private Player player;
 
-    [SyncVar]
-    private int kills;
-    [SyncVar]
-    private int deaths;
-
-    [Command]
-    public void CmdIncrementKills()
-    {
-        kills++;
-    }
-
-    [Command]
-    public void CmdIncrementDeaths()
-    {
-        deaths++;
-    }
-
-    public int getKills()
-    { return kills; }
-
-    public int getDeaths()
-    { return deaths; }
-
     // Use this for initialization
     void Start() {
-        //if (isServer && isLocalPlayer)
-        //    NetworkManagerFFA.instance.ServerChangeScene("Game");
-
-
-
         if (isLocalPlayer)
             CmdSpawnMyUnit();
 
@@ -59,13 +31,9 @@ public class PlayerNetwork : NetworkBehaviour {
 	[Command]
 	void CmdSpawnMyUnit()
 	{
-        kills = 0;
-        deaths = 0;
-
         playerUnit = Instantiate(playerH);
         player = playerUnit.GetComponent<Player>();
         player.Respawn();
-        player.playerNetwork=this;
         NetworkServer.SpawnWithClientAuthority (playerUnit, connectionToClient);
 	}
 }
